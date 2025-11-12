@@ -1,0 +1,22 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        {% for i in faculty %}
+        <a href="{% url 'facul' i.id %}">
+          <div class="about-card">
+            <div class="card-icon">
+              <i class="fas fa-university"></i>
+            </div>
+            <h3>{{i.suf}} {{i.name}}</h3>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

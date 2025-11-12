@@ -1,0 +1,65 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <div class="about-card">
+          <div class="card-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <p>{{faculty.name}}</p>
+          <p>{{faculty.email}}</p>
+        </div>
+        <h3>Patents</h3>
+        {% for i in patent %}
+        <div class="about-card">
+          <p>Patent Number : {{i.patentNumber}}</p>
+          <p>Title {{i.title}}</p>
+        </div>
+        {% endfor %}
+
+        <h3>Books</h3>
+        {% for i in books %}
+        <div class="about-card">
+          <p>Title {{i.title}}</p>
+        </div>
+        {% endfor %}
+
+        <h3>BookChapters</h3>
+        {% for i in bookchapters %}
+        <div class="about-card">
+          <p>Title {{i.title}}</p>
+          <p>Patent Number : {{i.chapterName}}</p>
+        </div>
+        {% endfor %}
+
+        <h3>Journals</h3>
+        {% for i in journals %}
+        <div class="about-card">
+          <p>Title {{i.title}}</p>
+          <p>Patent Number : {{i.journalName}}</p>
+        </div>
+        {% endfor %}
+
+        <h3>Copyrights</h3>
+        {% for i in copyrights %}
+        <div class="about-card">
+          <p>Patent Number : {{i.copyrightNumber}}</p>
+          <p>Title {{i.title}}</p>
+        </div>
+        {% endfor %}
+
+        <h3>Conferences</h3>
+        {% for i in conferences %}
+        <div class="about-card">
+          <p>Title {{i.title}}</p>
+          <p>Patent Number : {{i.journalName}}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
