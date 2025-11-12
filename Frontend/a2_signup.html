@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign Up — IIC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent1:#4f46e5; --accent2:#06b6d4;
+      --muted:#9aa4b2; --white:#eef2ff;
+      --radius:16px; --maxw:640px;
+    }
+    *{box-sizing:border-box;}
+    body {
+      margin:0; min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      color:var(--white);
+      background:
+        radial-gradient(1200px 600px at 8% 12%, rgba(79,70,229,0.10), transparent 8%),
+        radial-gradient(900px 420px at 92% 88%, rgba(6,182,212,0.06), transparent 8%),
+        linear-gradient(180deg,#071026 0%, #041627 100%);
+      display:flex; align-items:center; justify-content:center;
+      padding:36px 16px;
+    }
+
+    .auth-card {
+      width:100%;
+      max-width:var(--maxw);
+      border-radius:var(--radius);
+      padding:36px 32px;
+      background: rgba(10, 20, 40, 0.75);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 0 40px rgba(79,70,229,0.25), inset 0 1px 0 rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .auth-card:hover {
+      box-shadow:0 0 50px rgba(79,70,229,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+      border-color: rgba(79,70,229,0.25);
+    }
+
+    .auth-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .logo-icon { width:60px; height:60px; border-radius:14px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(79,70,229,0.2); font-size:22px; }
+    .auth-title { margin:0; font-weight:800; font-size:24px; color:var(--white); }
+    .auth-subtitle { margin:2px 0 0; color:var(--muted); font-size:13px; }
+
+    form { display:grid; gap:16px; margin-top:12px; }
+    label { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
+
+    input[type="text"], input[type="email"], select {
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      font-size:14px;
+      color:#e6e8f0; /* slightly darker white for readability */
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.04);
+      outline:none;
+      transition:all .18s ease;
+    }
+
+    /* placeholder & default option */
+    input::placeholder { color:rgba(230,232,240,0.5); }
+    select option[value=""] { color: rgba(230,232,240,0.6); }
+
+    /* dropdown open view (system popups vary by browser) */
+    select option { color:#000; background:#fff; }
+
+    input:focus, select:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 2px rgba(6,182,212,0.18);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:640px) { .grid-2 { grid-template-columns:1fr; } }
+
+    /* image upload styling */
+    .image-upload {
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .img-preview {
+      width:88px;
+      height:88px;
+      border-radius:50%;
+      overflow:hidden;
+      flex: 0 0 88px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg,var(--accent1),var(--accent2));
+      border:2px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 30px rgba(3,7,18,0.5);
+    }
+    .img-preview img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .img-controls { flex:1; display:flex; flex-direction:column; gap:8px; }
+    .img-note { font-size:13px; color:var(--muted); }
+
+    .file-input {
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:10px;
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:white;
+      font-weight:700;
+      border:0;
+      cursor:pointer;
+      width:max-content;
+    }
+
+    .actions { display:flex; gap:10px; justify-content:flex-end; align-items:center; margin-top:8px; }
+    .btn {
+      position:relative; overflow:hidden; border:0; padding:12px 18px; border-radius:10px; font-weight:700; cursor:pointer;
+      display:inline-flex; gap:8px; align-items:center; color:#051127; background:linear-gradient(90deg,#fff,#f3f4ff);
+      box-shadow:0 10px 30px rgba(3,7,18,0.35); transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(3,7,18,0.48); }
+    .btn.primary { color:white; background:linear-gradient(90deg,var(--accent1),var(--accent2)); box-shadow:0 12px 36px rgba(79,70,229,0.28); }
+
+    .auth-footer { margin-top:18px; text-align:center; color:var(--muted); font-size:13px; }
+    .auth-footer a { color:var(--accent2); font-weight:600; text-decoration:none; }
+
+    /* small helper */
+    .small { font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <section class="auth-card" role="main" aria-labelledby="signupTitle">
+    <div class="auth-header">
+      <div class="logo-icon">💡</div>
+      <div>
+        <h1 id="signupTitle" class="auth-title">Create your account</h1>
+        <p class="auth-subtitle">Fill the details to get started</p>
+      </div>
+    </div>
+
+    <form id="signupForm" class="auth-form" action="#" method="post" enctype="multipart/form-data" novalidate>
+
+      <!-- INPUT LEVELS (start)
+           All the main input fields are grouped here — email, name, college id, role, department, and image upload.
+           You can find/modify form inputs inside this block.
+      -->
+      <div>
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="first_name" placeholder="First name" required>
+        </div>
+        <div>
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="last_name" placeholder="Last name" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <label for="collegeId">College ID</label>
+          <input type="text" id="collegeId" name="college_id" placeholder="e.g., CSE20251234" required>
+        </div>
+        <div>
+          <label for="role">Role</label>
+          <select id="role" name="role" required>
+            <option value="">Select role</option>
+            <option value="admin">Admin</option>
+            <option value="faculty">Faculty</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="department">Department</label>
+        <select id="department" name="department" required>
+          <option value="">Select department</option>
+          <option>Computer Science & Engineering</option>
+          <option>Computer Science & Engineering - AIML</option>
+          <option>Computer Science & Engineering - DATA SCIENCE</option>
+          <option>Computer Science & Engineering - CYBER SECURITY</option>
+          <option>Computer Science & BUSINESS SYSTEM</option>
+          <option>Computer Science & Engineering - IOT</option>
+          <option>INFORMATION TECHNOLOGY</option>
+          <option>ELECTRONICS & COMMUNICATION ENGINEERING</option>
+          <option>CIVIL ENGINEERING</option>
+          <option>MECHANICAL ENGINEERING</option>
+          <option>ELECTRICAL ENGINEERING</option>
+          <option>ELECTRONICS & INSTRUMENTATION ENGINEERING</option>
+          <option>Computer Applications</option>
+          <option>FOOD TECHNOLOGY</option>
+          <option>MEDIA SCIENCE</option>
+          <option>Business Studies</option>
+          <option>HOSPITAL ADMINISTRATION</option>
+          <option>HOSPITALITY MANAGEMENT</option>
+          <option>Basic Science & Humanities</option>
+          <option>Master in Business Administration</option>
+        </select>
+      </div>
+
+      <!-- Image upload block -->
+      <div>
+        <label for="profileImage">Profile Image (optional)</label>
+        <div class="image-upload">
+          <div class="img-preview" id="imgPreview" title="Image preview">
+            <!-- default SVG placeholder -->
+            <img id="previewImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%25' height='100%25' fill='%23ffffff' opacity='0.0'/><text x='50%25' y='50%25' font-size='120' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff'>%F0%9F%90%B6</text></svg>" alt="preview">
+          </div>
+
+          <div class="img-controls">
+            <label class="file-input" for="profileImageInput">Choose Image</label>
+            <input id="profileImageInput" name="profile_image" type="file" accept="image/png,image/jpeg,image/webp" style="display:none">
+            <div class="img-note">Allowed: PNG, JPG, WEBP. Max recommended: 2MB.</div>
+          </div>
+        </div>
+      </div>
+      <!-- INPUT LEVELS (end) -->
+
+      <!-- BUTTONS (start)
+           The Reset and Submit (Create Account) buttons are here. Modify inside this block.
+      -->
+      <div class="actions">
+        <button type="reset" class="btn" id="resetBtn">Reset</button>
+        <button type="submit" class="btn primary" id="submitBtn">
+          Create Account
+          <svg style="width:14px;height:14px;vertical-align:middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <!-- BUTTONS (end) -->
+
+      <div id="signupMessage" class="form-message" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </section>
+
+  <script>
+    // ripple animation for buttons (visual only)
+    document.querySelectorAll('.btn').forEach(btn=>{
+      btn.addEventListener('click', function (e) {
+        const circle = document.createElement('span');
+        const d = Math.max(this.clientWidth, this.clientHeight);
+        const rect = this.getBoundingClientRect();
+        Object.assign(circle.style, {
+          width: d + 'px', height: d + 'px',
+          left: (e.clientX - rect.left - d/2) + 'px',
+          top: (e.clientY - rect.top - d/2) + 'px',
+          position: 'absolute', borderRadius: '50%',
+          background: 'rgba(255,255,255,0.10)', transform: 'scale(0)',
+          animation: 'ripple 600ms linear', pointerEvents: 'none'
+        });
+        this.style.position = 'relative';
+        this.appendChild(circle);
+        setTimeout(()=> circle.remove(), 650);
+      });
+    });
+
+    // image preview logic
+    const input = document.getElementById('profileImageInput');
+    const previewImg = document.getElementById('previewImg');
+    const imgPreviewContainer = document.getElementById('imgPreview');
+
+    input.addEventListener('change', function () {
+      const file = this.files && this.files[0];
+      if (!file) return;
+      // simple size check (optional)
+      if (file.size > 4 * 1024 * 1024) { // 4MB limit warning
+        alert('File is too large (max 4MB). Please choose a smaller image.');
+        this.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // label click triggers file input (label has for attribute)
+    // Reset behaviour: restore default placeholder preview
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      previewImg.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%25' height='100%25' fill='%23ffffff' opacity='0.0'/><text x='50%25' y='50%25' font-size='120' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff'>%F0%9F%90%B6</text></svg>";
+      document.getElementById('profileImageInput').value = '';
+    });
+  </script>
+</body>
+</html>

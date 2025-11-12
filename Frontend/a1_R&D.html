@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>R&D — Anchor-linked Form (Section Redirect)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071026;
+    --accent1:#4f46e5;
+    --accent2:#06b6d4;
+    --muted:#9aa4b2;
+    --white:#eef2ff;
+    --radius:14px;
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  html { scroll-behavior: smooth; } /* smooth scrolling */
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(79,70,229,0.10), transparent 8%),
+      radial-gradient(900px 400px at 90% 90%, rgba(6,182,212,0.06), transparent 8%),
+      linear-gradient(180deg,#071026 0%, #041627 100%);
+    color:var(--white);
+    padding:36px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:var(--maxw);
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap:26px;
+    align-items:start;
+  }
+
+  /* SIDEBAR */
+  .sidebar{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius);
+    padding:18px;
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    position:sticky;
+    top:36px;
+    height:fit-content;
+  }
+
+  /* <-- CHANGED: center image and move title below it, increase image size --> */
+  .top-image {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:18px;
+    text-align:center;
+  }
+  .top-image img {
+    width:120px;   /* increased size */
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid rgba(255,255,255,0.06);
+    box-shadow: 0 12px 34px rgba(3,7,18,0.6);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .top-image a { display:inline-block; }
+  .top-image img:hover { transform:translateY(-4px); box-shadow: 0 20px 48px rgba(3,7,18,0.75); }
+
+  /* larger, bolder title placed under image */
+  .brand h3{margin:0;font-size:20px;font-weight:900}
+  .brand p{margin:0;margin-top:6px;color:var(--muted);font-size:13px}
+
+  .progress { margin-top:8px; display:flex;flex-direction:column;gap:8px; }
+
+  .step-link {
+    display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;text-decoration:none;color:inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border:1px solid rgba(255,255,255,0.02);
+    transition: all .22s ease;
+  }
+  .step-link:hover {
+    transform:translateY(-6px);
+    box-shadow: 0 18px 46px rgba(3,7,18,0.6);
+    border-image: linear-gradient(90deg, var(--accent1), var(--accent2)) 1;
+    background: linear-gradient(90deg, rgba(79,70,229,0.06), rgba(6,182,212,0.03));
+  }
+  .bullet{
+    width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:15px;
+  }
+  .step-text { font-size:13px; color:var(--white); }
+  .step-sub { font-size:12px; color:var(--muted); margin-top:4px; }
+
+  .hint{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.45;padding-top:6px}
+
+  /* FORM AREA */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border-radius: var(--radius);
+    padding:22px;
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 40px rgba(2,6,23,0.5);
+  }
+
+  h1{font-size:20px;margin:0 0 6px;color:var(--white);font-weight:800}
+  .lead{color:var(--muted);font-size:13px;margin-bottom:16px}
+
+  form{display:flex;flex-direction:column;gap:16px}
+
+  /* Section card — outer highlight on hover or focus-within */
+  .section {
+    border-radius:12px;
+    padding:16px;
+    border:2px solid rgba(255,255,255,0.02);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    transition: all .35s cubic-bezier(.2,.9,.2,1);
+    position:relative;
+    overflow:visible;
+  }
+
+  .section:hover,
+  .section:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 60px rgba(3,7,18,0.6);
+    border-image: linear-gradient(90deg, var(--accent1), var(--accent2)) 1;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
+  }
+
+  .section:target {
+    outline: 6px solid rgba(79,70,229,0.14);
+    box-shadow: 0 32px 80px rgba(79,70,229,0.24);
+    transform: translateY(-8px) scale(1.01);
+    border-image: linear-gradient(90deg, var(--accent2), var(--accent1)) 1;
+    background: linear-gradient(90deg, rgba(79,70,229,0.05), rgba(6,182,212,0.02));
+  }
+
+  .section .title { display:flex;align-items:center;gap:12px;margin-bottom:10px; }
+  .badge {
+    width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:18px;
+    box-shadow: 0 8px 26px rgba(79,70,229,0.16);
+  }
+  .section h3{margin:0;font-size:15px;color:var(--white);font-weight:700}
+  .section p.desc{margin:4px 0 12px;color:var(--muted);font-size:13px}
+
+  /* layout */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid-3{grid-template-columns: repeat(3, 1fr);}
+  .full{grid-column:1/-1}
+
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input[type="text"], input[type="url"], input[type="email"], input[type="date"], select, textarea {
+    width:100%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border:1px solid rgba(255,255,255,0.04);
+    padding:12px 12px;border-radius:10px;color:var(--white);
+    outline:none;font-size:14px;transition:all .18s ease;
+  }
+  textarea{min-height:96px;resize:vertical}
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.28) }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: rgba(255,255,255,0.14);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+
+  .actions {
+    display:flex;gap:12px;justify-content:flex-end;align-items:center;margin-top:6px;
+  }
+
+  .btn {
+    position:relative; overflow:hidden; border:0; padding:12px 18px; border-radius:10px; font-weight:700;
+    cursor:pointer; color: #051127; background: linear-gradient(90deg, #fff, #f3f4ff);
+    box-shadow: 0 10px 30px rgba(3,7,18,0.35); transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(3,7,18,0.48); }
+  .btn.primary{ color:white; background: linear-gradient(90deg, var(--accent1), var(--accent2)); box-shadow: 0 12px 36px rgba(79,70,229,0.28); }
+
+  .small { font-size:12px;color:var(--muted);margin-top:6px }
+
+  @media (max-width:980px){
+    .wrap{grid-template-columns: 1fr; padding-bottom:60px}
+    .sidebar{position:static;width:100%}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap" role="region" aria-label="R&D Form with anchor navigation">
+    <aside class="sidebar" aria-hidden="false">
+
+      <!-- LEFT TOP IMAGE: clicking scrolls to Research Links
+           Image embedded via data URI (SVG with cat emoji) so it's visible without external requests -->
+      <div class="top-image">
+        <a href="#sec-research" title="Jump to Research Links">
+          <img
+            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%25' height='100%25' fill='%23ffffff' opacity='0.0'/><text x='50%25' y='50%25' font-size='180' dominant-baseline='middle' text-anchor='middle'>%F0%9F%90%B1</text></svg>"
+            alt="Cat image">
+        </a>
+
+        <!-- Innovation Council placed directly under image -->
+        <div class="brand">
+          <div>
+            <h3>Innovation Council</h3>
+            <p class="small">Click items to jump to the relevant section on the form.</p>
+          </div>
+        </div>
+      </div>
+
+      <nav class="progress" aria-label="Form sections (click to jump)">
+        <!-- anchor links that scroll to form sections on the right -->
+        <a class="step-link" href="#sec-research">
+          <div class="bullet">1</div>
+          <div>
+            <div class="step-text">Research Links</div>
+            <div class="step-sub">Scholar, ORCID, Vidwan</div>
+          </div>
+        </a>
+
+        <a class="step-link" href="#sec-patent">
+          <div class="bullet">2</div>
+          <div>
+            <div class="step-text">Patents & Copyrights</div>
+            <div class="step-sub">Numbers, status, year</div>
+          </div>
+        </a>
+
+        <a class="step-link" href="#sec-journal">
+          <div class="bullet">3</div>
+          <div>
+            <div class="step-text">Publications</div>
+            <div class="step-sub">Journal, DOI, pages</div>
+          </div>
+        </a>
+
+        <a class="step-link" href="#sec-book">
+          <div class="bullet">4</div>
+          <div>
+            <div class="step-text">Books / Chapters</div>
+            <div class="step-sub">ISBN, chapters</div>
+          </div>
+        </a>
+
+        <a class="step-link" href="#sec-conf">
+          <div class="bullet">5</div>
+          <div>
+            <div class="step-text">Conferences</div>
+            <div class="step-sub">Paper, DOI, year</div>
+          </div>
+        </a>
+      </nav>
+
+      <div class="hint">
+        Tip: clicking any item or the image will scroll to that form section. The section will be highlighted so you can see the exact spot.
+      </div>
+    </aside>
+
+    <main class="card" role="main">
+      <h1>R&D Submission</h1>
+      <p class="lead">Fill details from <strong>Research Links</strong> to <strong>Conference Details</strong>. Click the left items to jump to sections.</p>
+
+      <!-- Native form: change action to your server or Google Form POST URL -->
+      <form id="rdForm" action="#" method="post" enctype="multipart/form-data" autocomplete="on">
+
+        <!-- Research Links -->
+        <section id="sec-research" class="section" aria-labelledby="sec-research-label">
+          <div class="title">
+            <div class="badge">RL</div>
+            <div>
+              <h3 id="sec-research-label">Research Links</h3>
+              <p class="desc">Google Scholar, ORCID, Scopus ID, Vidwan — add the profile URLs/IDs.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div>
+              <label for="google_scholar">Google Scholar Link</label>
+              <input id="google_scholar" name="google_scholar" type="url" placeholder="https://scholar.google.com/">
+            </div>
+            <div>
+              <label for="orcid">ORCID</label>
+              <input id="orcid" name="orcid" type="text" placeholder="0000-0000-0000-0000">
+            </div>
+            <div>
+              <label for="scopus">Scopus ID</label>
+              <input id="scopus" name="scopus" type="text" placeholder="N/A or ID">
+            </div>
+            <div>
+              <label for="researcher_id">Researcher ID</label>
+              <input id="researcher_id" name="researcher_id" type="text" placeholder="ResearcherID or N/A">
+            </div>
+            <div class="full">
+              <label for="vidwan">Vidwan Portal Link</label>
+              <input id="vidwan" name="vidwan" type="url" placeholder="https://vidwan.inflibnet.ac.in/">
+              <div class="small">Provide public profile URL to link your publications and profile.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Patents -->
+        <section id="sec-patent" class="section" aria-labelledby="sec-patent-label">
+          <div class="title">
+            <div class="badge">PT</div>
+            <div>
+              <h3 id="sec-patent-label">Patents Details</h3>
+              <p class="desc">Patent/Application number, area, domain, title and status.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div>
+              <label for="patent_no">Patent Number / Application Number</label>
+              <input id="patent_no" name="patent_no" type="text" placeholder="APP-XXXX-YYYY">
+            </div>
+            <div>
+              <label for="patent_area">Area</label>
+              <input id="patent_area" name="patent_area" type="text" placeholder="Example Area">
+            </div>
+            <div>
+              <label for="patent_domain">Domain</label>
+              <input id="patent_domain" name="patent_domain" type="text" placeholder="Example Domain">
+            </div>
+            <div>
+              <label for="patent_title">Title</label>
+              <input id="patent_title" name="patent_title" type="text" placeholder="Example Patent Title">
+            </div>
+            <div>
+              <label for="patent_status">Status</label>
+              <select id="patent_status" name="patent_status">
+                <option value="">-- select --</option>
+                <option>Filed</option>
+                <option selected>Published</option>
+                <option>Granted</option>
+              </select>
+            </div>
+            <div>
+              <label for="patent_year">Year</label>
+              <input id="patent_year" name="patent_year" type="text" placeholder="2025">
+            </div>
+          </div>
+        </section>
+
+        <!-- Journal -->
+        <section id="sec-journal" class="section" aria-labelledby="sec-journal-label">
+          <div class="title">
+            <div class="badge">JP</div>
+            <div>
+              <h3 id="sec-journal-label">Journal / Manuscript Details</h3>
+              <p class="desc">Manuscript title, authors, ISBN, publisher, pages, DOI.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="full">
+              <label for="ms_title">Title of the Manuscript</label>
+              <input id="ms_title" name="ms_title" type="text" placeholder="Sample Manuscript Title">
+            </div>
+
+            <div>
+              <label for="ms_authors">Authors Details</label>
+              <input id="ms_authors" name="ms_authors" type="text" placeholder="Dr. Faculty B, Co-authors">
+            </div>
+            <div>
+              <label for="ms_isbn">ISBN</label>
+              <input id="ms_isbn" name="ms_isbn" type="text" placeholder="978-1-23456-789-0">
+            </div>
+
+            <div>
+              <label for="ms_journal">Journal / Conference Name</label>
+              <input id="ms_journal" name="ms_journal" type="text" placeholder="Sample Journal">
+            </div>
+            <div>
+              <label for="ms_publisher">Publisher Name</label>
+              <input id="ms_publisher" name="ms_publisher" type="text" placeholder="Sample Publisher">
+            </div>
+
+            <div>
+              <label for="ms_issue">Issue</label>
+              <input id="ms_issue" name="ms_issue" type="text" placeholder="1">
+            </div>
+            <div>
+              <label for="ms_no">No</label>
+              <input id="ms_no" name="ms_no" type="text" placeholder="1">
+            </div>
+            <div>
+              <label for="ms_pages">Page No</label>
+              <input id="ms_pages" name="ms_pages" type="text" placeholder="1-10">
+            </div>
+            <div>
+              <label for="ms_year">Year</label>
+              <input id="ms_year" name="ms_year" type="text" placeholder="2025">
+            </div>
+            <div class="full">
+              <label for="ms_doi">DOI / Link</label>
+              <input id="ms_doi" name="ms_doi" type="url" placeholder="https://doi.org/...">
+            </div>
+          </div>
+        </section>
+
+        <!-- Book -->
+        <section id="sec-book" class="section" aria-labelledby="sec-book-label">
+          <div class="title">
+            <div class="badge">BK</div>
+            <div>
+              <h3 id="sec-book-label">Book Details</h3>
+              <p class="desc">Title, authors, ISBN, publisher, year.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="full">
+              <label for="book_title">Title of the Book</label>
+              <input id="book_title" name="book_title" type="text" placeholder="Sample Book Title">
+            </div>
+            <div>
+              <label for="book_authors">Authors Details</label>
+              <input id="book_authors" name="book_authors" type="text" placeholder="Dr. Faculty B">
+            </div>
+            <div>
+              <label for="book_isbn">ISBN</label>
+              <input id="book_isbn" name="book_isbn" type="text" placeholder="978-0-00000-000-0">
+            </div>
+            <div>
+              <label for="book_publisher">Publisher Name</label>
+              <input id="book_publisher" name="book_publisher" type="text" placeholder="Sample Publisher">
+            </div>
+            <div>
+              <label for="book_year">Year</label>
+              <input id="book_year" name="book_year" type="text" placeholder="2024">
+            </div>
+          </div>
+        </section>
+
+        <!-- Book Chapter -->
+        <section id="sec-chapter" class="section" aria-labelledby="sec-chapter-label">
+          <div class="title">
+            <div class="badge">CH</div>
+            <div>
+              <h3 id="sec-chapter-label">Book Chapter Details</h3>
+              <p class="desc">Chapter title, book ISBN, pages, DOI.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="full">
+              <label for="ch_book">Title of the Book</label>
+              <input id="ch_book" name="ch_book" type="text" placeholder="Sample Book Title">
+            </div>
+            <div>
+              <label for="ch_authors">Authors Details</label>
+              <input id="ch_authors" name="ch_authors" type="text" placeholder="Dr. Faculty B">
+            </div>
+            <div>
+              <label for="ch_isbn">ISBN</label>
+              <input id="ch_isbn" name="ch_isbn" type="text" placeholder="978-0-11111-111-1">
+            </div>
+            <div>
+              <label for="ch_name">Name of the Chapter</label>
+              <input id="ch_name" name="ch_name" type="text" placeholder="Sample Chapter Name">
+            </div>
+            <div>
+              <label for="ch_publisher">Publisher Name</label>
+              <input id="ch_publisher" name="ch_publisher" type="text" placeholder="Sample Publisher">
+            </div>
+            <div>
+              <label for="ch_pages">Page No</label>
+              <input id="ch_pages" name="ch_pages" type="text" placeholder="11-25">
+            </div>
+            <div>
+              <label for="ch_year">Year</label>
+              <input id="ch_year" name="ch_year" type="text" placeholder="2025">
+            </div>
+            <div class="full">
+              <label for="ch_doi">DOI / Link</label>
+              <input id="ch_doi" name="ch_doi" type="url" placeholder="https://doi.org/...">
+            </div>
+          </div>
+        </section>
+
+        <!-- Conference -->
+        <section id="sec-conf" class="section" aria-labelledby="sec-conf-label">
+          <div class="title">
+            <div class="badge">CF</div>
+            <div>
+              <h3 id="sec-conf-label">Conference Details</h3>
+              <p class="desc">Paper title, authors, ISSN, proceedings, DOI and year.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="full">
+              <label for="conf_title">Title of the Paper</label>
+              <input id="conf_title" name="conf_title" type="text" placeholder="Sample Conference Paper">
+            </div>
+            <div>
+              <label for="conf_authors">Authors Details</label>
+              <input id="conf_authors" name="conf_authors" type="text" placeholder="Dr. Faculty B, Co-authors">
+            </div>
+            <div>
+              <label for="conf_issn">ISSN</label>
+              <input id="conf_issn" name="conf_issn" type="text" placeholder="0000-0000">
+            </div>
+            <div>
+              <label for="conf_journal">Conference / Journal Name</label>
+              <input id="conf_journal" name="conf_journal" type="text" placeholder="Sample Conference">
+            </div>
+            <div>
+              <label for="conf_publisher">Publisher / Organiser</label>
+              <input id="conf_publisher" name="conf_publisher" type="text" placeholder="Sample Org">
+            </div>
+            <div>
+              <label for="conf_issue">Issue</label>
+              <input id="conf_issue" name="conf_issue" type="text" placeholder="1">
+            </div>
+            <div>
+              <label for="conf_no">No</label>
+              <input id="conf_no" name="conf_no" type="text" placeholder="1">
+            </div>
+            <div>
+              <label for="conf_pages">Page No</label>
+              <input id="conf_pages" name="conf_pages" type="text" placeholder="21-30">
+            </div>
+            <div>
+              <label for="conf_year">Year</label>
+              <input id="conf_year" name="conf_year" type="text" placeholder="2025">
+            </div>
+            <div class="full">
+              <label for="conf_doi">DOI / Link</label>
+              <input id="conf_doi" name="conf_doi" type="url" placeholder="https://doi.org/...">
+            </div>
+          </div>
+        </section>
+
+        <!-- Submit area (only Reset and Submit remain) -->
+        <div class="section" style="display:flex;flex-direction:column;gap:12px;align-items:stretch;">
+          <div class="actions">
+            <button type="reset" class="btn" title="Reset">Reset</button>
+            <button type="submit" class="btn primary" title="Submit Form">Submit</button>
+          </div>
+          <div class="small">Native form submission — change <code>action</code> to your server or a Google Form POST endpoint to collect responses online.</div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Minimal JS: ripple visual only; no form logic -->
+  <script>
+    document.querySelectorAll('.btn').forEach(btn=>{
+      btn.addEventListener('click', function (e) {
+        const circle = document.createElement('span');
+        const d = Math.max(this.clientWidth, this.clientHeight);
+        const rect = this.getBoundingClientRect();
+        circle.style.width = circle.style.height = d + 'px';
+        circle.style.left = (e.clientX - rect.left - d/2) + 'px';
+        circle.style.top = (e.clientY - rect.top - d/2) + 'px';
+        circle.style.position = 'absolute';
+        circle.style.borderRadius = '50%';
+        circle.style.background = 'rgba(255,255,255,0.10)';
+        circle.style.transform = 'scale(0)';
+        circle.style.animation = 'ripple 600ms linear';
+        circle.style.pointerEvents = 'none';
+        this.style.position = 'relative';
+        this.appendChild(circle);
+        setTimeout(()=> circle.remove(), 650);
+      });
+    });
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes ripple { to { transform: scale(3); opacity: 0; } }`;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
