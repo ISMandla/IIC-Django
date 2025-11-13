@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Dark Theme (Working)</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ===== THEME VARIABLES ===== */
+    :root {
+      --bg-dark: #0d1117;
+      --bg-card: #161b22;
+      --text-light: #f0f6fc;
+      --text-gray: #8b949e;
+      --primary-blue: #3b82f6;
+      --border-color: #28303a;
+      --shadow-md: 0 8px 30px rgba(2,6,23,0.6);
+      --success-bg: #0f2f1f;
+      --error-bg: #2b1010;
+    }
+
+    /* ===== PAGE ===== */
+    html,body { height:100%; }
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #071019 0%, var(--bg-dark) 100%);
+      color:var(--text-light);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .auth-wrapper {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+    }
+
+    .auth-card {
+      width:100%;
+      max-width:460px;
+      background:var(--bg-card);
+      border-radius:16px;
+      padding:32px;
+      box-shadow:var(--shadow-md);
+      border:1px solid var(--border-color);
+    }
+
+    .auth-header { text-align:center; margin-bottom:20px; }
+    .logo-icon { font-size:36px; color:var(--primary-blue); margin-bottom:10px; }
+    .auth-title { font-size:22px; font-weight:800; color:var(--text-light); }
+    .auth-subtitle { font-size:13px; color:var(--text-gray); margin-top:6px; }
+
+    /* FORM */
+    .auth-form { display:grid; gap:14px; }
+    .form-group label { display:block; font-size:13px; color:var(--text-gray); margin-bottom:6px; }
+    .form-group { position:relative; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid var(--border-color);
+      background:#0b0f14;
+      color:var(--text-light);
+      font-size:14px;
+      outline:none;
+      transition:box-shadow .16s ease, border-color .16s ease;
+      box-sizing:border-box;
+    }
+    input::placeholder { color: rgba(240,246,252,0.18); }
+    input:focus { border-color:var(--primary-blue); box-shadow: 0 0 0 6px rgba(59,130,246,0.06); }
+
+    /* Password toggle button */
+    .pw-toggle {
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      background:transparent;
+      border:0;
+      color:var(--text-gray);
+      cursor:pointer;
+      font-size:14px;
+      padding:6px;
+    }
+
+    .auth-actions {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+
+    .auth-link { color:var(--primary-blue); text-decoration:none; font-weight:600; font-size:13px; }
+    .auth-link:hover { color:#60a5fa; text-decoration:underline; }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #3b82f6, #2563eb);
+      color:white;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.18);
+    }
+    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
+
+    .btn-icon { font-size:14px; }
+
+    .auth-footer { margin-top:18px; text-align:center; color:var(--text-gray); font-size:13px; }
+    .auth-footer a { color:var(--primary-blue); font-weight:600; text-decoration:none; }
+
+    /* Messages */
+    .form-message {
+      padding:10px 12px;
+      border-radius:8px;
+      font-size:13px;
+      display:none;
+    }
+    .form-message.error {
+      background:var(--error-bg);
+      color:#ffb4b4;
+      border:1px solid #7a1717;
+      display:block;
+    }
+    .form-message.success {
+      background:var(--success-bg);
+      color:#8ef0c3;
+      border:1px solid #0a6b46;
+      display:block;
+    }
+
+    /* Small helper */
+    .muted { color:var(--text-gray); font-size:13px; }
+
+    /* Responsive */
+    @media (max-width:480px){
+      .auth-card { padding:20px; border-radius:12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card" role="main" aria-labelledby="loginTitle">
+      <div class="auth-header">
+        <div class="logo-icon" aria-hidden="true"><i class="fas fa-lightbulb"></i></div>
+        <div id="loginTitle" class="auth-title">Welcome back</div>
+        <div class="auth-subtitle">Sign in to continue</div>
+      </div>
+
+      <form id="loginForm" class="auth-form" autocomplete="on" novalidate>
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" name="email" type="email" inputmode="email" placeholder="you@example.com" required aria-required="true" aria-describedby="emailHelp" />
+          <div id="emailHelp" class="muted" style="margin-top:6px;">We'll never share your email.</div>
+        </div>
+
+        <div class="form-group" style="margin-top:6px;">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" placeholder="••••••••" required aria-required="true" />
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password" title="Show password"><i class="fa-solid fa-eye"></i></button>
+        </div>
+
+        <div class="auth-actions" style="margin-top:4px;">
+          <a href="#" id="forgotPasswordLink" class="auth-link">Forgot password?</a>
+        </div>
+
+        <button id="submitBtn" type="submit" class="btn btn-primary" aria-live="polite">
+          <span id="btnText">Sign In</span>
+          <i class="fa-solid fa-arrow-right btn-icon" aria-hidden="true"></i>
+        </button>
+
+        <div id="loginMessage" class="form-message" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="auth-footer">
+        Don’t have an account?
+        <a href="signup.html">Create one</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- CONFIG ----------
+    // Demo credentials (for local/demo only)
+    const DEMO_EMAIL = 'demo@example.com';
+    const DEMO_PASSWORD = 'password123';
+    const DEMO_TOKEN = 'demo_token_abcdef123456';
+
+    // ---------- DOM ----------
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('loginEmail');
+    const pwInput = document.getElementById('loginPassword');
+    const pwToggle = document.getElementById('pwToggle');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const messageBox = document.getElementById('loginMessage');
+    const forgotLink = document.getElementById('forgotPasswordLink');
+
+    // ---------- Helpers ----------
+    function showMessage(type, text) {
+      messageBox.className = 'form-message ' + (type === 'error' ? 'error' : 'success');
+      messageBox.textContent = text;
+      messageBox.style.display = 'block';
+    }
+    function clearMessage() {
+      messageBox.style.display = 'none';
+      messageBox.textContent = '';
+      messageBox.className = 'form-message';
+    }
+
+    function setLoading(isLoading) {
+      if (isLoading) {
+        submitBtn.disabled = true;
+        btnText.textContent = 'Signing in...';
+      } else {
+        submitBtn.disabled = false;
+        btnText.textContent = 'Sign In';
+      }
+    }
+
+    // ---------- Password toggle ----------
+    pwToggle.addEventListener('click', () => {
+      const isPwd = pwInput.type === 'password';
+      pwInput.type = isPwd ? 'text' : 'password';
+      pwToggle.innerHTML = isPwd ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+      pwToggle.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+    });
+
+    // ---------- Forgot password ----------
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      // simple UX: if email provided, show message; else prompt
+      if (email) {
+        // In real app: send reset request
+        showMessage('success', 'Password reset link sent to ' + email + ' (demo).');
+      } else {
+        showMessage('error', 'Enter your email above to receive a password reset link.');
+        emailInput.focus();
+      }
+      setTimeout(() => clearMessage(), 4000);
+    });
+
+    // ---------- Form submit (demo + placeholder for real API) ----------
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessage();
+
+      const email = emailInput.value.trim();
+      const password = pwInput.value;
+
+      // Basic client-side validation
+      if (!email) {
+        showMessage('error', 'Email is required.');
+        emailInput.focus();
+        return;
+      }
+      // Basic email pattern
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        showMessage('error', 'Please enter a valid email address.');
+        emailInput.focus();
+        return;
+      }
+      if (!password) {
+        showMessage('error', 'Password is required.');
+        pwInput.focus();
+        return;
+      }
+
+      // Start loading state
+      setLoading(true);
+
+      try {
+        // ---------- PLACEHOLDER: Replace with real API call ----------
+        // Example using fetch for real backend:
+        /*
+        const resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const json = await resp.json();
+        if (!resp.ok) throw new Error(json.message || 'Login failed');
+        // save token and redirect
+        localStorage.setItem('auth_token', json.token);
+        window.location.href = '/dashboard';
+        */
+
+        // ---------- DEMO AUTH ----------
+        // Simulate network latency (demo)
+        await new Promise(resolve => setTimeout(resolve, 700));
+
+        if (email.toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {
+          // success
+          localStorage.setItem('auth_token', DEMO_TOKEN);
+          showMessage('success', 'Signed in successfully. Redirecting...');
+          // redirect to a dashboard (in demo we wait a moment so user sees message)
+          setTimeout(() => {
+            // replace with your route, e.g. /app or /dashboard
+            window.location.href = 'dashboard.html';
+          }, 900);
+        } else {
+          // invalid credentials
+          showMessage('error', 'Invalid email or password.');
+        }
+
+      } catch (err) {
+        console.error('Login error:', err);
+        showMessage('error', 'Something went wrong. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Optional: handle "Enter" on password box to submit — default form submit handles it, no extra needed.
+
+    // Accessibility: focus first input on page load
+    window.addEventListener('load', () => {
+      emailInput.focus();
+    });
+
+    // Pre-fill demo credentials (remove in production)
+    (function prefillDemo(){
+      // Uncomment next lines to prefill demo credentials for quicker demoing:
+      // emailInput.value = DEMO_EMAIL;
+      // pwInput.value = DEMO_PASSWORD;
+    })();
+  </script>
+</body>
+</html>
