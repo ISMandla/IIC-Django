@@ -1,77 +1,703 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
+<style>
+  :root {
+    /* Colors */
+    --bg: #f6f8fb;
+    --panel: #ffffff;
+    --muted: #55606a;
+    --accent1: #2563eb;
+    --accent2: #06b6d4;
+
+    /* Glass / UI */
+    --glass: rgba(255, 255, 255, 0.98);
+
+    /* Shadows, radius, sizing */
+    --card-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+    --radius: 12px;
+    --maxw: 1150px;
+    --gap: 18px;
+  }
+  
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, var(--bg), #fff);
+    color: var(--muted);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { display: block; max-width: 100%; }
+
+  /* ============================================================
+    Page container / header
+    ============================================================ */
+  .container {
+    max-width: var(--maxw);
+    margin: 28px auto;
+    padding: 5px;
+  }
+
+  /* center the header */
+  .page-header {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin: 6px 0;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle,
+  .tip {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 6px 0;
+  }
+
+  /* ============================================================
+    Form layout
+    ============================================================ */
+  form {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--gap);
+    align-items: start;
+  }
+
+  @media (max-width: 980px) {
+    form { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+    Sidebar
+    ============================================================ */
+  .sidebar {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+  }
+
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .avatar img {
+    width: 130px;
+    height: 130px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .meta {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* ============================================================
+    Main content / cards / sections
+    ============================================================ */
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .section-title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #111;
+    font-weight: 800;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* grid helpers */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 720px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+    Form controls
+    ============================================================ */
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #fff;
+    font-size: 14px;
+    color: #111;
+    outline: none;
+  }
+
+  textarea { min-height: 80px; resize: vertical; }
+
+  input[type="file"] { font-size: 13px; padding: 6px 0; }
+
+  .small { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  /* ============================================================
+    Buttons / actions
+    ============================================================ */
+  .actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .btn.primary {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+  }
+
+  .btn.ghost {
+    background: #f1f5f9;
+    color: var(--muted);
+  }
+
+  /* ============================================================
+    Events list / items
+    ============================================================ */
+  .events-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .event-item {
+    display: grid;
+    grid-template-columns: 1fr 140px;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .event-item .meta { font-size: 13px; color: var(--muted); }
+
+  /* ============================================================
+    Responsive adjustments (global)
+    ============================================================ */
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .row { grid-template-columns: 1fr; }
+    .event-item { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+    Decorative / animation helpers
+    ============================================================ */
+  .fade {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all .6s cubic-bezier(.2, .9, .2, 1);
+  }
+
+  .fade.in {
+    opacity: 1;
+    transform: none;
+}
+
+</style>
+
+
 <section class="about" id="about">
   <div class="container">
-    <div class="about-content">
-      <div class="about-text">
-        <div class="about-card">
-          <div class="card-icon">
-            <i class="fas fa-university"></i>
+
+      <aside class="sidebar fade" aria-label="Profile summary">
+        <div class="avatar">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='%23888'>Upload Photo</text></svg>" alt="Profile photo">
+          <div>
+            <div style="font-weight:700;color:#111">{{ faculty.suf }} {{faculty.name}}</div>
+            <div style="font-size:13px;color:var(--muted)">{{ faculty.email }}</div>
+            <div style="font-size:13px;color:var(--muted)">{{ faculty.dept }}</div>
           </div>
-          <p>{{faculty.name}}</p>
-          <p>{{faculty.email}}</p>
         </div>
-        <h3>Patents</h3>
-        <a href="{% url "form" %}" style="text-decoration: none;">
-          <button style="background: #3788d4; color: #fff; border-radius: 5px; padding:10px 20px">Add Patent</button>
-        </a>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main">
+
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+
+        <!-- Research profile links -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- Patents -->
+            <h3 id="research-links">Patent</h3>
+
         {% for i in patent %}
-        <div class="about-card">
-          <div>
-            <p>Patent Number : {{i.patentNumber}}</p>
-            <p>Title {{i.title}}</p>
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
           </div>
-          <div>
-            <a href="{% url 'updateform' i.id %}"><button
-                style="background: #f0ad4e; color: #fff; border-radius: 5px; padding:5px 10px; margin-right:5px">Edit</button></a>
-            <a href="{% url 'deletePatentform' i.id %}"><button
-                style="background: #d9534f; color: #fff; border-radius: 5px; padding:5px 10px;">Delete</button></a>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Patent Number</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.patentNumber}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Area</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.area}}</p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {% endfor %}
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Domain</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.domain}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Title</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.title}}</p>
+              </div>
+            </div>
+          </div>
 
-        <h3>Books</h3>
-        {% for i in books %}
-        <div class="about-card">
-          <p>Title {{i.title}}</p>
-        </div>
-        {% endfor %}
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Year</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.year}}</p>
+              </div>
+            </div>
+          </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Status</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.stat}}</p>
+              </div>
+            </div>
+          </div>
+            
+        </section>
+        {% endfor  %}
+        <!-- Copyrights -->
+            <h3 id="research-links">Copyright</h3>
 
-        <h3>BookChapters</h3>
-        {% for i in bookchapters %}
-        <div class="about-card">
-          <p>Title {{i.title}}</p>
-          <p>Patent Number : {{i.chapterName}}</p>
-        </div>
-        {% endfor %}
-
-        <h3>Journals</h3>
-        {% for i in journals %}
-        <div class="about-card">
-          <p>Title {{i.title}}</p>
-          <p>Patent Number : {{i.journalName}}</p>
-        </div>
-        {% endfor %}
-
-        <h3>Copyrights</h3>
         {% for i in copyrights %}
-        <div class="about-card">
-          <p>Patent Number : {{i.copyrightNumber}}</p>
-          <p>Title {{i.title}}</p>
-        </div>
-        {% endfor %}
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+          </div>
 
-        <h3>Conferences</h3>
-        {% for i in conferences %}
-        <div class="about-card">
-          <p>Title {{i.title}}</p>
-          <p>Patent Number : {{i.journalName}}</p>
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Copyright Number</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.copyrightNumber}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Area</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.area}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Domain</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.domain}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Title</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.title}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Year</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.year}}</p>
+              </div>
+            </div>
+          </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Status</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{i.stat}}</p>
+              </div>
+            </div>
+          </div>
+            
+        </section>
+        {% endfor  %}
+        <!-- Journal / Manuscript -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- Book Details -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- Book Chapter Details -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- Conference Details -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- EVENTS (newly added) -->
+        <section class="card fade" aria-labelledby="research-links">
+          <div class="section-title">
+            <h3 id="research-links">Research Profile Links / IDs</h3>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Google Scholar Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.googleScholar}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">ORCID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.orcid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Scopus ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.scopusid}}</p>
+              </div>
+            </div>
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Researcher ID</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.researchid}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label for="google_scholar" style="font-weight: bold">Vidwan Portal Link</label>
+              <div style="height:30px border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:8px 12px;background:#f9fafb; font-size:14px;color:#111; font-weight: bold">
+                <p style="font-size=10px font-weight: bold">{{basicDetail.vidwanPortal}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </section>
+
+        <!-- Submit / actions -->
+        <div class="card fade" style="display:flex;justify-content:flex-end;align-items:center">
+          <div class="actions" style="width:100%;justify-content:flex-end">
+            <button type="reset" class="btn ghost">Reset</button>
+            <button type="submit" class="btn primary">Save Professional Details</button>
+          </div>
         </div>
-        {% endfor %}
-      </div>
-    </div>
+
+      </main>
+  
   </div>
+
+  <script>
+    // Decorative-only JS: entrance animation. DOES NOT interact with inputs.
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.fade').forEach((el, i) => {
+        setTimeout(() => el.classList.add('in'), 80 + i * 60);
+      });
+    });
+  </script>
 </section>
 
 {% endblock %}

@@ -27,8 +27,10 @@ def facul(req , pk):
     bookchapters = bookChapter.objects.filter(faculty = faculty)
     journals = journal.objects.filter(faculty = faculty)
     conferences = conference.objects.filter(faculty = faculty)
-    context = {"faculty" : faculty , "patent" : pat , "books" : books , "journals" : journals , "bookchapters" : bookchapters , "copyrights" : copyr , "conferences" : conferences}
-    return render(req , 'faculty.html' , context)
+    basic = basicDetails.objects.get(faculty=faculty)
+    context = {"faculty" : faculty , "patent" : pat , "books" : books , "journals" : journals , "bookchapters" : bookchapters , "copyrights" : copyr , "conferences" : conferences, "basicDetail" : basic}
+    return render(req , 'fac.html' , context)
+
 
 def basicCreate(req):
     basicsf = basicDetailsForm()
