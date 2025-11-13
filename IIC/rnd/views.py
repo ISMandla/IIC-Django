@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
+from django.shortcuts import render , redirect
+from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal , basicDetails
+from .forms import basicDetailsForm
 
 # Create your views here.
 
@@ -25,3 +26,30 @@ def facul(req , pk):
     conferences = conference.objects.filter(faculty = faculty)
     context = {"faculty" : faculty , "patent" : pat , "books" : books , "journals" : journals , "bookchapters" : bookchapters , "copyrights" : copyr , "conferences" : conferences}
     return render(req , 'faculty.html' , context)
+
+def basicCreate(req):
+    basicsf = basicDetailsForm()
+    if(req.method == "POST"):
+        basicsf = basicDetails(req.POST)
+        if(basicsf.is_valid()):
+            basicsf.save()
+        return redirect("admin-site")
+    context = {'basicsf' : basicsf}
+    return render(req , "form.html" , context)
+
+def basicEdit(req , pk):
+    basic = basicDetails.objects.get(id = pk)
+    basicf = basicDetailsForm(instance = basic)
+    if(req.method == "POST"):
+        basicf = basicDetailsForm(req.POST , instance = basic)
+
+        if basicf.is_valid():
+            basicf.save()
+            return redirect('admin-site')
+    context = {'basicf' : basicf}
+    return render(req,"form.html",context)
+
+def basicDeletion(req , pk):
+    basic = basicDetails.objects.get(id = pk)
+    basic.delete()
+    return redirect('admin-site')
