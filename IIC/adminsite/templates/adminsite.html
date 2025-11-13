@@ -1,0 +1,207 @@
+{% extends 'main.html' %} {% block content %}
+
+<section class="hero" id="home">
+  <div class="hero-background">
+    <div class="hero-gradient"></div>
+    <div class="hero-pattern"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Ministry of Education, Government of India</span>
+      </div>
+      <h1 class="hero-title">
+        Institution's Innovation Council
+        <span class="title-highlight">Fostering Innovation & Creativity</span>
+      </h1>
+      <p class="hero-subtitle">
+        Empowering students to transform ideas into viable prototypes and create
+        impactful solutions for society, industry, and the nation.
+      </p>
+      <div class="hero-buttons">
+        <a href="#about" class="btn btn-primary">
+          <span>Explore IIC</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="#activities" class="btn btn-secondary">
+          <span>Our Activities</span>
+          <i class="fas fa-rocket"></i>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number" data-target="200">0</div>
+          <div class="stat-label">Innovation Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="500">0</div>
+          <div class="stat-label">Active Students</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="50">0</div>
+          <div class="stat-label">Prototypes Developed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="100">0</div>
+          <div class="stat-label">Competitions Won</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-mouse">
+      <div class="scroll-wheel"></div>
+    </div>
+    <span>Scroll to explore</span>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Get in Touch</span>
+      <h2 class="section-title">Connect With Us</h2>
+      <p class="section-subtitle">
+        Have questions or want to get involved? We'd love to hear from you
+      </p>
+    </div>
+    <div class="contact-content">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Location</h4>
+            <p>
+              Institution's Innovation Council<br />Higher Education Institution
+            </p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Email</h4>
+            <p>iic@institution.edu<br />innovation@institution.edu</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Phone</h4>
+            <p>+91 XXX XXX XXXX<br />+91 XXX XXX XXXX</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="contact-details">
+            <h4>Office Hours</h4>
+            <p>
+              Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: 10:00 AM - 2:00
+              PM
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-wrapper">
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter your phone"
+              />
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <select id="subject" name="subject" required>
+                <option value="">Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="membership">IIC Membership</option>
+                <option value="project">Project Support</option>
+                <option value="competition">Competition Information</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              placeholder="Tell us about your inquiry..."
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <span>Send Message</span>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+          <div class="form-message" id="formMessage"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <div>
+            <a href={% url 'post-create' %}><button class="btn btn-primary">Add Post</button></a>
+            <a href={% url 'achievment-create' %}><button class="btn btn-primary">Add Achievement</button></a>
+            <a href={% url 'event-create' %}><button class="btn btn-primary">Add Event</button></a>
+            <a href={% url 'contactOrg-create' %}><button class="btn btn-primary">Add Organisation Contact</button></a>
+            <a href={% url 'organisation-create' %}><button class="btn btn-primary">Add Organisation</button></a>
+            {% for i in posts %}
+        <div class="about-card">
+            <a href={% url 'post-update' i.id %}><button class="btn btn-primary">Edit Post</button></a>
+            <a href={% url 'post-delete' i.id %}><button class="btn btn-primary">Delete Post</button></a>
+          <div class="card-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <h3>{{i.title}}</h3>
+          <p>{{i.description}}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

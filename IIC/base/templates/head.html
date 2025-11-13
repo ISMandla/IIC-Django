@@ -1,5 +1,5 @@
 {% load static %} {% block content %}
-<header class="header" id="header">
+<!-- <header class="header" id="header">
   <nav class="nav">
     <div class="nav-container">
       <div class="logo">
@@ -19,7 +19,11 @@
         <li><a href="#activities" class="nav-link">Activities</a></li>
         <li><a href={% url "research" %} class="nav-link">R&D</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
+        {% if request.user.is_authenticated %}
+        <li><a href={% url 'logout' %} class="nav-link">Logout</a></li>
+        {% else %}
         <li><a href={% url 'login' %} class="nav-link">Login</a></li>
+        {% endif %}
       </ul>
       <button class="menu-toggle" id="menuToggle">
         <span></span>
@@ -28,5 +32,41 @@
       </button>
     </div>
   </nav>
-</header>
+</header> -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">IIC</span>
+                        <span class="logo-subtitle">Innovation Council</span>
+                    </div>
+                </div>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href={% url 'home' %} class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#mission" class="nav-link">Mission</a></li>
+                    <li><a href="#vision" class="nav-link">Vision</a></li>
+                    <li><a href="#activities" class="nav-link">Activities</a></li>
+                    <li><a href={% url "research" %} class="nav-link">R&D</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                    {% if request.user.is_authenticated %}
+                    <li><a href={% url 'logout' %} class="nav-link">Logout</a></li>
+                    {% else %}
+                    <li><a href={% url 'login' %} class="nav-link">Login</a></li>
+                    {% endif %}          
+                </ul>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
 {% endblock %}

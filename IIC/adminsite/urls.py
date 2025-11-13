@@ -1,0 +1,28 @@
+from django.contrib import admin
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.homepage , name = "admin-site"),
+    path('post-create/' , views.postCreate , name = "post-create"),
+    path('post-update/<int:pk>' , views.postEdit , name = "post-update"),
+    path('post-delete/<int:pk>' , views.postDeletion , name = "post-delete"),
+
+    path('achievment-create/' , views.achievCreate , name = "achievment-create"),
+    path('achievment-update/<int:pk>' , views.achievEdit , name = "achievment-update"),
+    path('achievment-delete/<int:pk>' , views.achievDeletion , name = "achievment-delete"),
+
+    path('event-create/' , views.eventCreate , name = "event-create"),
+    path('event-update/<int:pk>' , views.eventEdit , name = "event-update"),
+    path('event-delete/<int:pk>' , views.eventDeletion , name = "event-delete"),
+
+    path('contactOrg-create/' , views.contactOrgCreate , name = "contactOrg-create"),
+    path('contactOrg-update/<int:pk>' , views.contactOrgEdit , name = "contactOrg-update"),
+    path('contactOrg-delete/<int:pk>' , views.contactOrgDeletion , name = "contactOrg-delete"),
+
+    path('organisation-create/' , views.organisationCreate , name = "organisation-create"),
+    path('organisation-update/<int:pk>' , views.organisationEdit , name = "organisation-update"),
+    path('organisation-delete/<int:pk>' , views.organisationDeletion , name = "organisation-delete"),
+
+]

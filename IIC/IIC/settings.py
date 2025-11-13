@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-    'rnd.apps.RndConfig'
+    'rnd.apps.RndConfig',
+    'adminsite.apps.AdminsiteConfig',
 ]
 
 MIDDLEWARE = [
