@@ -4,7 +4,8 @@ from .forms import basicDetailsForm , patentForm
 from django.shortcuts import render, redirect
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
 from .forms import bookForm, bookChapterForm, deptForm, facultForm, suffForm, copyrightForm, conferenceForm, journalForm
-from base.models import iicInfo
+from base.models import iicInfo, querys
+from django.db.models import Q
 
 # Create your views here.
 
@@ -382,3 +383,17 @@ def rndinfo(req):
         patentf = patentForm()    
     context = {"basicf" : basicf , "patentf" : patentf , "bookcf" : bookcf , "bookf" : bookf , "copyrightf" : copyrightf , "journalf" : journalf , "conferencef" : conferencef}
     return render(req , "rndinfo.html" , context)
+
+def serchView(request):
+    query = request.GET.get('q', '')
+    result = facult.objects.none()
+    info = iicInfo.objects.first()
+    if query:
+        result = facult.objects.filter(
+            Q(name__icontains=query) |
+            Q(dept__name__icontains=query) |
+            Q(suf__pre__icontains=query)     
+        )
+
+    context = {'results': result, 'query': query, 'iic' : info}
+    return render(request, 'search_results.html', context)

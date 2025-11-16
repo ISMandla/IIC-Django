@@ -1,33 +1,32 @@
-
 {% load static %}
 <style>
 /* ===========================
-   Faculty / Departments — "Second" style
-   =========================== */
+   Faculty / Departments — improved style (keeps original logic)
+   ============================ */
 
-/* Theme vars — tweak colors here */
 :root{
-  --page-bg: #ffffff;
-  --text-strong: #0f172a;
+  --page-bg: #fbfdff;
+  --card-bg: #ffffff;
+  --text-strong: #071330;
   --muted: #6b7280;
-  --accent-blue: #2b51d6;       /* blue ring color */
+  --accent-blue: #2b51d6;
+  --ring-shadow: rgba(43,81,214,0.12);
   --card-border: rgba(15,23,42,0.04);
-  --card-shadow: 0 10px 30px rgba(2,6,23,0.06);
-  --card-shadow-subtle: 0 6px 16px rgba(2,6,23,0.04);
-  --radius: 16px;
-  --card-max-width: 680px;      /* max width of each card track on wide screens */
+  --card-shadow: 0 18px 50px rgba(2,6,23,0.06);
+  --card-shadow-subtle: 0 8px 22px rgba(2,6,23,0.04);
+  --radius: 18px;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Page spacing so header & footer don't overlap */
+/* page spacing */
 .about {
   background: var(--page-bg);
-  padding: 72px 0 140px; /* generous so footer won't overlap */
+  padding: 72px 16px 140px;
   position: relative;
   z-index: 1;
 }
 
-/* central container */
+/* container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -35,129 +34,140 @@
   box-sizing: border-box;
 }
 
-/* Departments heading (matches second screenshot) */
+/* heading */
 .about h2.section-title,
 .about h2 {
-  font-size: clamp(28px, 3.6vw, 44px);
+  font-size: clamp(26px, 3.2vw, 44px);
   font-weight: 800;
   color: var(--text-strong);
-  margin: 0 0 28px;
-  text-align: left; /* screenshot shows left aligned heading; change to center if needed */
+  margin: 0 0 20px;
+  text-align: center;
 }
 
-/* Grid that centers cards and keeps them wide like the second image */
-.about-text {
+/* grid: center wide cards */
+.about-content { display:block; }
+.about-text{
   display: grid;
   gap: 28px;
   grid-template-columns: repeat(1, minmax(0,1fr));
-  justify-items: center; /* center each track */
+  justify-items: center;
   margin-top: 6px;
 }
-
-/* On wider screens we want two horizontally-separated card tracks,
-   each card track itself is wide (to produce the big rectangular card look) */
-@media (min-width: 720px) {
-  .about-text {
+@media(min-width:720px){
+  /* 2 columns of wide card tracks */
+  .about-text{
     grid-template-columns: repeat(2, minmax(0,1fr));
     align-items: start;
   }
 }
+@media (min-width: 1024px){
+  .about-text{
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
 
-/* Card: large, wide, airy */
+/* large card */
 .about-card {
   width: 100%;
-  max-width: var(--card-max-width); /* ensures the card becomes the big rectangular block */
-  background: #ffffff;
+  max-width: 720px;          /* wide rectangular look */
+  background: var(--card-bg);
   border-radius: calc(var(--radius) + 6px);
-  padding: 48px 36px;
+  padding: 40px 36px;
   box-shadow: var(--card-shadow-subtle);
   border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  gap: 18px;
+  transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease, border-color .18s ease;
   box-sizing: border-box;
+  text-align: center;
+  min-height: 240px;
 }
 
-/* Hover/Focus lift */
+/* hover and keyboard focus lift */
 .about-card:hover,
+.about-card:focus-within,
 .about a:focus .about-card {
   transform: translateY(-8px);
   box-shadow: var(--card-shadow);
   border-color: rgba(43,81,214,0.08);
+  outline: none;
 }
 
-/* Avatar ring (centered above name) */
+/* avatar ring */
 .card-icon {
   width: 130px;
   height: 130px;
   border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  border: 6px solid var(--accent-blue); /* prominent blue ring */
-  box-shadow: 0 6px 22px rgba(43,81,214,0.08); /* soft blue glow */
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg,#ffffff,#f7fbff);
+  border: 6px solid var(--accent-blue);
+  box-shadow: 0 8px 26px var(--ring-shadow);
   overflow: hidden;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* Avatar image inside ring */
+/* avatar image */
 .card-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 999px;
   display: block;
-  /* small white inner inset to mimic screenshot */
-  box-shadow: inset 0 0 0 6px #ffffff;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 6px #ffffff; /* white inset like screenshot */
 }
 
-/* Name styling */
+/* initials fallback */
+.card-initials {
+  width: 100%;
+  height: 100%;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  font-size:48px;
+  color: #fff;
+  background: linear-gradient(135deg,#3b82f6,#2563eb);
+  border-radius:999px;
+  letter-spacing:-0.02em;
+}
+
+/* details */
 .about-card h3 {
   margin: 0;
   font-size: 22px;
   font-weight: 800;
   color: var(--text-strong);
-  text-align: center;
   line-height: 1.05;
+  word-break:break-word;
 }
 
-/* Designation  */
 .about-card .role {
   margin: 0;
   font-size: 15px;
   color: var(--muted);
-  text-align: center;
-  font-weight: 500;
+  text-align:center;
+  font-weight: 600;
 }
 
-.about a { display: block; color: inherit; text-decoration: none; }
-.about a:focus { outline: none; }
+/* accessible clickable wrapper */
+.about a { display:block; color:inherit; text-decoration:none; }
+.about a:focus { outline-offset: 4px; }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 640px) {
-  .about {
-    padding: 48px 0 90px;
-  }
-  .about-card {
-    padding: 28px 18px;
-    max-width: 520px;
-  }
-  .card-icon {
-    width: 96px;
-    height: 96px;
-    border-width: 5px;
-  }
-  .about-card h3 { font-size: 18px; }
-  .about-card .role { font-size: 14px; }
+/* smaller screens */
+@media(max-width:640px){
+  .about { padding:48px 12px 90px; }
+  .about-card { padding: 24px 18px; max-width:520px; min-height:150px; }
+  .card-icon { width:96px; height:96px; border-width:5px; }
+  .card-initials { font-size:28px; }
+  .about-card h3 { font-size:18px; }
+  .about-card .role { font-size:14px; }
 }
 
-.about-card h3 { word-break: break-word; }
-
+/* extra spacing after grid */
 .about-text + * { margin-bottom: 80px; }
-
 </style>
 
 <body>
@@ -165,15 +175,25 @@
 <section class="about" id="about">
   <div class="container">
     <h2 style="text-align:center;margin-bottom:14px; color: black">{{ depart }}</h2>
+
     <div class="about-content">
       <div class="about-text">
         {% for i in faculty %}
-        <a href="{% url 'facul' i.id %}">
-          <div class="about-card">
-            <div class="card-icon">
-              <i class="fas fa-university"></i>
+        <a href="{% url 'facul' i.id %}" aria-label="Open faculty profile {{ i.name }}">
+          <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
+            <div class="card-icon" aria-hidden="true">
+              {% if i.photo %}
+                <img src="{{ i.photo.url }}" alt="Photo of {{ i.name }}">
+              {% else %}
+                <div class="card-initials" aria-hidden="false">{{ i.name|slice:":1"|upper }}</div>
+              {% endif %}
             </div>
-            <h3>{{i.suf}} {{i.name}}</h3>
+
+            <h3 id="fac-name-{{ i.id }}">{{ i.suf }} {{ i.name }}</h3>
+            {# optional role/position — leave blank if not set (keeps logic same) #}
+            {% if i.designation %}
+              <div class="role">{{ i.designation }}</div>
+            {% endif %}
           </div>
         </a>
         {% endfor %}
@@ -183,4 +203,3 @@
 </section>
 {% include 'foot.html' %}
 </body>
-

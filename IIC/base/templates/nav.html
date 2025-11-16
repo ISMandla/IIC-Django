@@ -11,138 +11,101 @@
     />
 
     <style>
-      /* --- Basic resets & tokens --- */
-      :root {
+      /* --- Basic tokens & resets --- */
+      :root{
         --bg: #ffffff;
         --accent: #2563eb;
         --accent-2: #06b6d4;
         --muted: #64748b;
         --text: #0f1724;
         --radius: 12px;
-        --nav-height: 72px;
+        --nav-height: 76px; /* slightly taller for better balance */
       }
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial, sans-serif;
-        color: var(--text);
-        -webkit-font-smoothing: antialiased;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;background:var(--bg)}
+      a{color:inherit;text-decoration:none}
+
+      /* --- NAV WRAP --- */
+      .nav-wrap{
+        position:fixed;
+        left:0;right:0;top:0;
+        z-index:1000;
+        transition: background 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+        will-change:background,box-shadow;
+        padding-bottom:6px;
+        backdrop-filter: blur(4px);
       }
 
-      /* --- Navbar container --- */
-      .nav-wrap {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        z-index: 1000;
-        padding-bottom: 10px;
-        transition: all 0.28s ease;
-      }
-      .nav {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 24px;
-        height: var(--nav-height);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 14px;
+      .nav{
+        max-width:1400px;
+        margin:0 auto;
+        padding:0 24px;
+        height:var(--nav-height);
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
       }
 
-      /* Logo */
-      .logo-mark {
-        width: 56px;
-        height: 56px;
-        border-radius: 10px;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        box-shadow: none;
-        border: 0;
+      /* BRAND */
+      .brand{display:flex;align-items:center;gap:14px}
+      .brand a{display:inline-flex;align-items:center;gap:12px}
+      .logo-mark{
+        width:72px;            /* bigger logo for better balance */
+        height:72px;
+        border-radius:10px;
+        overflow:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:transparent;
+        box-shadow:none;
+        border:0;
+        transition: transform 200ms ease;
       }
-      .logo-mark img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        background: transparent;
-      }
+      .logo-mark img{display:block;width:100%;height:100%;object-fit:contain;background:transparent}
 
-      /* right container holds menu + auth + mobile toggle */
-      .right-area {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: auto;
-      }
+      /* right area */
+      .right-area{display:flex;align-items:center;gap:12px;width:auto}
 
       /* desktop menu */
-      .menu {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-      }
-      .menu-item {
-        position: relative;
+      .menu{display:flex;gap:8px;align-items:center}
+      .menu-item{position:relative}
+
+      .menu-link{
+        display:inline-block;
+        padding:8px 14px;
+        border-radius:10px;
+        font-weight:600;
+        color:var(--muted);
+        transition: color 160ms ease, transform 160ms ease, background 160ms ease;
+        position:relative;
       }
 
-      .menu-link {
-        display: inline-block;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 600;
-        color: var(--muted);
-        transition: all 0.18s ease;
+      /* subtle underline for active */
+      .menu-link.active::after{
+        content:'';
+        position:absolute;
+        left:10%;
+        right:10%;
+        bottom:6px;
+        height:3px;
+        border-radius:3px;
+        background:linear-gradient(90deg,var(--accent),var(--accent-2));
+        transform-origin:center;
       }
 
-      .menu-link:hover {
-        color: var(--text);
-        background: rgba(15, 23, 36, 0.03);
+      .menu-link:hover{
+        color:var(--text);
+        background: rgba(15,23,36,0.03);
         transform: translateY(-2px);
       }
-      .menu-link.active {
-        background: rgba(15, 23, 36, 0.06);
-        color: var(--text);
-        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
-      }
 
-      /* -------------------------
-       FIX ADDED HERE
-       Give Innovation & Connect (div.menu-link) pointer + hover behavior
-    ---------------------------*/
-      .menu-item > .menu-link {
-        cursor: pointer;
-      }
-      .menu-item > .menu-link:hover {
-        color: var(--text);
-        background: rgba(15, 23, 36, 0.03);
-        transform: translateY(-2px);
-      }
-      .menu-item > .menu-link.active {
-        background: rgba(15, 23, 36, 0.06);
-        color: var(--text);
-        box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
-      }
-      /* ------------------------- */
+      /* enable pointer for div.menu-link (non-clickable parent items) */
+      .menu-item > .menu-link{cursor:pointer}
+      .menu-item > .menu-link:hover{color:var(--text);background:rgba(15,23,36,0.03);transform:translateY(-2px)}
 
       /* dropdown */
-      .dropdown {
+      .dropdown{
         position: absolute;
         left: 0;
         top: 100%;
@@ -155,148 +118,59 @@
         padding: 8px;
         display: none;
         transform-origin: top center;
-  }
-      .dropdown.show {
-        display: block;
-        animation: dropdown-in 0.18s ease;
       }
-      @keyframes dropdown-in {
-        from {
-          opacity: 0;
-          transform: translateY(-6px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
+      .dropdown.show{display:block;animation:dropdown-in 180ms ease}
+      @keyframes dropdown-in{
+        from{opacity:0;transform:translateY(-6px) scale(0.985)}
+        to{opacity:1;transform:translateY(0) scale(1)}
       }
-      .dropdown a {
-        display: block;
-        padding: 10px 12px;
-        border-radius: 8px;
-        color: var(--muted);
-        font-weight: 600;
-      }
-      .dropdown a:hover {
-        background: rgba(15, 23, 36, 0.03);
-        color: var(--text);
-      }
+      .dropdown a{display:block;padding:10px 12px;border-radius:8px;color:var(--muted);font-weight:600}
+      .dropdown a:hover{background:rgba(15,23,36,0.03);color:var(--text)}
 
-      /* right-side auth buttons */
-      .auth {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        margin-left: 6px;
+      /* auth buttons */
+      .auth{display:flex;gap:8px;align-items:center;margin-left:6px}
+      .btn{padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+      .btn.ghost{background:transparent;border:1px solid rgba(15,23,36,0.06);color:var(--text);transition:background 160ms ease, transform 120ms ease}
+      .btn.ghost:hover{background:rgba(15,23,36,0.03);transform:translateY(-2px)}
+      .btn.primary{
+        background:linear-gradient(90deg,var(--accent),var(--accent-2));
+        color:#fff;
+        box-shadow:0 10px 24px rgba(37,99,235,0.12);
+        transition:transform 120ms ease, box-shadow 120ms ease;
       }
-      .btn {
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        border: 0;
-      }
-      .btn.ghost {
-        background: transparent;
-        border: 1px solid rgba(15, 23, 36, 0.06);
-        color: var(--text);
-      }
-      .btn.primary {
-        background: linear-gradient(90deg, var(--accent), var(--accent-2));
-        color: #fff;
-        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
-      }
+      .btn.primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,0.14)}
 
       /* mobile toggle */
-      .mobile-toggle {
-        display: none;
-        background: transparent;
-        border: 0;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 8px;
-      }
+      .mobile-toggle{display:none;background:transparent;border:0;font-size:20px;cursor:pointer;padding:8px}
 
-      /* mobile menu panel */
-      .mobile-panel {
-        display: none;
-        background: #fff;
-        border-top: 1px solid rgba(15, 23, 36, 0.06);
-        box-shadow: 0 18px 40px rgba(2, 6, 23, 0.06);
-      }
-      .mobile-panel.open {
-        display: block;
-        animation: panel-in 0.16s ease;
-      }
-      @keyframes panel-in {
-        from {
-          opacity: 0;
-          transform: translateY(-6px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .mobile-list {
-        padding: 12px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .mobile-list a {
-        padding: 12px 12px;
-        border-radius: 8px;
-        color: var(--muted);
-        font-weight: 600;
-      }
-      .mobile-list a:hover {
-        background: rgba(15, 23, 36, 0.03);
-        color: var(--text);
-      }
-      .mobile-sub {
-        padding-left: 14px;
-        margin-top: 4px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
+      /* mobile panel */
+      .mobile-panel{display:none;background:#fff;border-top:1px solid rgba(15,23,36,0.06);box-shadow:0 18px 40px rgba(2,6,23,0.06)}
+      .mobile-panel.open{display:block;animation:panel-in 160ms ease}
+      @keyframes panel-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+      .mobile-list{padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+      .mobile-list a{padding:12px 12px;border-radius:8px;color:var(--muted);font-weight:600}
+      .mobile-list a:hover{background:rgba(15,23,36,0.03);color:var(--text)}
+      .mobile-sub{padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:4px}
 
       /* small screens */
-      @media (max-width: 880px) {
-        .menu {
-          display: none;
-        }
-        .auth {
-          display: none;
-        }
-        .mobile-toggle {
-          display: inline-flex;
-        }
-        .nav {
-          padding: 0 12px;
-        }
+      @media (max-width:880px){
+        .menu{display:none}
+        .auth{display:none}
+        .mobile-toggle{display:inline-flex}
+        .nav{padding:0 12px}
+        .logo-mark{width:58px;height:58px} /* scale slightly down on mobile */
       }
 
-      /* transparent vs scrolled (applied to .nav-wrap) */
-      .nav-wrap.transparent {
-        background: transparent;
-        border-bottom: 0;
-        box-shadow: none;
-      }
-      .nav-wrap.scrolled {
-        background: #fff;
-        border-bottom: 1px solid rgba(233, 236, 240, 0.06);
-        box-shadow: 0 6px 18px rgba(229, 229, 233, 0.06);
-      }
+      /* transparent vs scrolled */
+      .nav-wrap.transparent{background:linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.0) 100%);box-shadow:none;border-bottom:0}
+      .nav-wrap.scrolled{background:#fff;border-bottom:1px solid rgba(233,236,240,0.06);box-shadow:0 8px 28px rgba(2,6,23,0.06);transform:translateY(0)}
 
-      /* accessibility focus rings */
-      .menu-link:focus,
-      .btn:focus,
-      .mobile-list a:focus {
-        outline: 3px solid rgba(37, 99, 235, 0.12);
-        outline-offset: 2px;
-      }
+      /* accessibility */
+      .menu-link:focus,.btn:focus,.mobile-list a:focus{outline:3px solid rgba(37,99,235,0.12);outline-offset:2px}
+      .brand a:focus{outline:3px solid rgba(2,6,23,0.06);outline-offset:3px;border-radius:8px}
+
+      /* ensure main content is not hidden behind fixed nav */
+      main{padding-top:calc(var(--nav-height) + 8px)}
     </style>
   </head>
   <body>
@@ -306,20 +180,15 @@
         <!-- left: only logo -->
         <div class="brand">
           <a href="/" aria-label="Home">
-            <span class="logo-mark" aria-hidden="true">
+            <span class="logo-mark" aria-hidden="false">
               <img src="{{iic.home.url}}" alt="IIC Logo" />
             </span>
           </a>
         </div>
 
         <!-- right: menu + auth + mobile toggle -->
-        <div class="right-area" style="margin-left: auto; align-items: center">
-          <div
-            class="menu"
-            id="desktopMenu"
-            role="menubar"
-            aria-label="Primary"
-          ></div>
+        <div class="right-area" style="margin-left:auto; align-items:center">
+          <div class="menu" id="desktopMenu" role="menubar" aria-label="Primary"></div>
 
           <div class="auth" id="authButtons" aria-live="polite"></div>
 
@@ -330,29 +199,8 @@
             aria-controls="mobilePanel"
             aria-label="Toggle menu"
           >
-            <svg
-              id="hambIcon"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <path d="M3 7h18M3 12h18M3 17h18" />
-            </svg>
-            <svg
-              id="closeIcon"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              style="display: none"
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+            <svg id="hambIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+            <svg id="closeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
       </nav>
@@ -363,10 +211,11 @@
       </div>
     </header>
 
-    <main style="padding-top: 0px">
-      <div style="max-width: 1200px; margin: 40px auto; padding: 0px"></div>
+    <main>
+      <div style="max-width:1200px;margin:40px auto;padding:0px"></div>
     </main>
 
+    <!-- KEEP JS LOGIC UNCHANGED -->
     <script>
       /****************************************************************
        * Navbar data
@@ -711,3 +560,4 @@
     </script>
   </body>
 </html>
+

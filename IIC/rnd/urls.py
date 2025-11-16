@@ -61,5 +61,8 @@ urlpatterns = [
     
     # ------------- RND Complete Form ---------------
     path('infoteach/', views.rndinfo , name = "rndinfo"),
+    
+    # ------------- search results ---------------
+    path('search-results/', views.serchView, name='searchresults'),
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)
