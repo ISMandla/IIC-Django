@@ -83,6 +83,7 @@ class querys(models.Model):
         return self.subject + " " + self.fullname
     
 class iicInfo(models.Model):
+    navLogo = models.ImageField(blank = True , null = True)
     logo = models.ImageField(blank = True , null = True)
     home = models.ImageField(blank = True , null = True)
     email = models.EmailField(blank = False , null = False)
