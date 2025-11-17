@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Section Form</title>
+
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f5f7fb;
+        margin: 0 auto;
+        justify-content: center;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+        padding: 28px 32px 30px;
+        margin: auto;
+      }
+
+      h2 {
+        margin-bottom: 18px;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-size: 0.92rem;
+        color: #4b5563;
+        font-weight: 500;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        font-size: 0.95rem;
+        outline: none;
+        resize: none;
+        transition: all 0.2s ease;
+      }
+
+      input:focus,
+      textarea:focus {
+        background: #fff;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.18);
+      }
+
+      textarea {
+        height: 160px;
+        line-height: 1.4;
+      }
+
+      .btn {
+        margin-top: 10px;
+        background: #4f46e5;
+        color: white;
+        border: none;
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .btn:hover {
+        background: #4338ca;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'nav.html' %}
+    <div class="container">
+      <h2>About Section</h2>
+      {% if postf != Null%}
+      <!-- Add Django action + csrf when using -->
+      <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="title">Title</label>
+          {{ postf.title }}
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          {{ postf.description }}
+        </div>
+
+        <button type="submit" class="btn">Submit</button>
+      </form>
+      {% endif %}
+    </div>
+    {% include 'foot.html' %}
+  </body>
+</html>
