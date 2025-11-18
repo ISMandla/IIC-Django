@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation, querys
+from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo
 from django.contrib.auth.models import User
 
 
@@ -39,6 +39,26 @@ class achievForm(ModelForm):
                 'style': 'resize: none; border-radius: 10px;'
             }),            
         }
+
+class iicInfoForm(ModelForm):
+    class Meta:
+        model = iicInfo
+        fields = "__all__"
+
+class meetingForm(ModelForm):
+    class Meta:
+        model = meeting
+        fields = "__all__"
+
+class galleryForm(ModelForm):
+    class Meta:
+        model = gallery
+        fields = "__all__"
+
+class noticeForm(ModelForm):
+    class Meta:
+        model = notice
+        fields = "__all__"
 
 class contactOrgForm(ModelForm):
     class Meta:
