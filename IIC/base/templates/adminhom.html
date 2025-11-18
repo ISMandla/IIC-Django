@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Institution of Innovation Council — Home</title>
+  <meta name="description" content="IIC Home — static HTML conversion of a React component with dynamic JS data" />
+
+  <style>
+    /* --------- basic reset & fonts --------- */
+    :root{
+      --bg-1: #f7f8fa;
+      --accent1: #2563eb;
+      --accent2: #06b6d4;
+      --slate-900: #0f1724;
+      --slate-700: #475569;
+      --glass-bg: rgba(255,255,255,0.7);
+      --card-shadow: 0 10px 30px rgba(16,24,40,0.06);
+      --muted: #6b7280;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      background: linear-gradient(180deg,var(--bg-1) 0%, #ffffff 100%);
+      color:var(--slate-900);
+      -webkit-text-size-adjust:100%;
+    }
+
+    .container {
+      max-width:1200px;
+      margin:0 auto;
+      padding:80px 20px;
+    }
+
+    /* ---------- hero section ---------- */
+    .hero { position:relative; min-height:80vh; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden; }
+    .hero-inner{ z-index:2; max-width:1500px; padding:50px; }
+
+    .logo {
+      width:180px;height:180px;border-radius:50%;margin:0 auto;
+      background: radial-gradient(circle at 30% 20%, rgba(37,99,235,0.12), transparent 20%), linear-gradient(135deg,var(--accent1),var(--accent2));
+      box-shadow: 0 12px 40px rgba(37,99,235,0.12);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .img{ width:200px;height:200px;border-radius:50%;object-fit: fill; }
+
+    h1.title { font-size:3rem; line-height:1.03; margin:14px 0 10px; font-weight:800; background:black; -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    p.lead { color:var(--slate-700); font-size:1.05rem; max-width:800px; margin:0 auto 22px; }
+
+    .btn { padding:12px 22px; border-radius:12px; font-weight:700; cursor:pointer; box-shadow: 0 10px 22px rgba(37,99,235,0.14); text-decoration:none; }
+    .btn-primary { background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; }
+
+    /* ---------- about section ---------- */
+    section.about { padding:100px 0 40px; }
+    .about-header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:8px; }
+    .about-header h2 { margin:0; font-size:1.6rem; font-weight:800; }
+
+    .about .glass { background:var(--glass-bg); border-radius:28px; padding:42px 28px 24px; box-shadow:var(--card-shadow); border:1px solid rgba(15,23,36,0.04); margin-bottom:28px; position:relative; }
+
+    .glass-toolbar { display:flex; gap:8px; position:absolute; top:10px; right:12px; z-index:1; }
+    .btn-sm { padding:8px 12px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; border:0; }
+    .btn-add { background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#fff; }
+
+    /* card grid */
+    .card-grid{ display:grid; grid-template-columns:1fr; gap:20px; }
+    @media(min-width:768px){ .card-grid{ grid-template-columns:1fr 1fr; } }
+
+    .card-3d { border-radius:20px; padding:26px; background:#fff; box-shadow:0 15px 40px rgba(2,6,23,0.06); transition: transform .22s; }
+    .card-3d:hover { transform: translateY(-8px); }
+
+    .icon-circle{ width:72px;height:72px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white }
+    .mission .icon-circle { background: linear-gradient(135deg,#1d4ed8,#2563eb); }
+    .vision .icon-circle { background: linear-gradient(135deg,#374151,#2563eb); }
+
+    /* ---------- MULTIPLE NOTICE SUPPORT ⬇️ ---------- */
+    .notice-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .notice-item {
+      padding: 10px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .notice-item-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .notice-item-text {
+      font-size: 0.86rem;
+      color: var(--slate-700);
+      line-height: 1.35;
+    }
+    .notice-item-meta {
+      margin-top: 3px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+    
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="logo">
+          <img class="img" src="/IIC-Django/Frontend/logo.jpeg" alt="logo">
+        </div>
+        <h1 class="title">Institution of Innovation Council</h1>
+        <p class="lead">Fostering Innovation, Creativity, and Entrepreneurship</p>
+        <a class="btn btn-primary" href="#about-section">Learn More</a>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about" id="about-section">
+
+      <div class="about-header">
+        <h2>About IIC</h2>
+        <button class="btn-sm btn-add">+ Add</button>
+      </div>
+
+      <div class="glass">
+        <div class="glass-toolbar">
+          <button class="btn-sm btn-edit">Edit</button>
+          <button class="btn-sm btn-delete" style="color:#ef4444;border:1px solid #ffd4d4;">Delete</button>
+        </div>
+
+        <p>
+          The Ministry of Education (MoE), Government of India, has established the MoE's Innovation Cell (MIC) to systematically foster a culture of innovation across all Higher Education Institutions (HEIs)...
+        </p>
+      </div>
+
+      <!-- NOTICE + VISION SIDE BY SIDE -->
+      <div class="card-grid">
+
+        <!-- UPDATED NOTICE CARD -->
+        <div class="card-3d mission">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a7 7 0 0 0 .6-3 7 7 0 1 0-7 7 7 7 0 0 0 3-1.4"/></svg>
+          </div>
+          <h3>Notice</h3>
+
+          <div class="notice-wrapper">
+
+            <div class="notice-item">
+              <div class="notice-item-title">Idea Presentation Meet</div>
+              <div class="notice-item-text">Join the campus idea pitch event to showcase innovative creations.</div>
+              <div class="notice-item-meta">Date: 17-03-2025</div>
+            </div>
+
+            <div class="notice-item">
+              <div class="notice-item-title">Startup Bootcamp</div>
+              <div class="notice-item-text">Registrations open for entrepreneurship bootcamp session.</div>
+              <div class="notice-item-meta">Date: 13-03-2025</div>
+            </div>
+
+            <div class="notice-item">
+              <div class="notice-item-title">Project Funding Call</div>
+              <div class="notice-item-text">Submit prototype proposals for prototyping seed funding.</div>
+              <div class="notice-item-meta">Date: 10-03-2025</div>
+            </div>
+
+          </div>
+
+          <a class="read-more" href="/notice-board">View All →</a>
+        </div>
+
+        <!-- VISION CARD (UNTOUCHED) -->
+        <div class="card-3d vision">
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Vision</h3>
+          <p>To transform the Institute into a leading hub of innovation, creativity, entrepreneurship, and start-up culture...</p>
+          <a class="read-more" href="/about/functions">Read More →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
