@@ -15,9 +15,10 @@ urlpatterns = [
     
     path('activities/', views.activities , name = "activities"),
     path('contact/', views.contact , name = "contact"),
-    path('gallery/', views.gallery , name = "gallery"),
+    path('gallery/', views.galleryPage , name = "gallery"),
     path('noticeboard/', views.noticeBoard , name = "notice"),
     path('achievments/', views.achiev , name = "achievments"),
+    path('meetings/', views.meet , name = "meet"),
 
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)
