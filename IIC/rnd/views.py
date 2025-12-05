@@ -2,10 +2,13 @@ from django.shortcuts import render , redirect
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal , basicDetails
 from .forms import basicDetailsForm , patentForm
 from django.shortcuts import render, redirect
+from django.conf import settings
 from .models import dept , facult , suff , patent , copyright , conference , book , bookChapter , journal
 from .forms import bookForm, bookChapterForm, deptForm, facultForm, suffForm, copyrightForm, conferenceForm, journalForm
 from base.models import iicInfo, querys
 from django.db.models import Q
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -415,3 +418,55 @@ def serchView(request):
 
     context = {'results': result, 'query': query, 'iic' : info}
     return render(request, 'search_results.html', context)
+
+import pdfkit
+pdfkit_config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_CMD)
+
+def faculty_pdf(req, pk):
+    
+    faculty = facult.objects.get(id = pk)
+    basic = basicDetails.objects.filter(faculty = faculty).first()
+    pat = patent.objects.filter(faculty=faculty)
+    copyr = copyright.objects.filter(faculty=faculty)
+    books = book.objects.filter(faculty=faculty)
+    bookchapters = bookChapter.objects.filter(faculty=faculty)
+    journals = journal.objects.filter(faculty=faculty)
+    conferences = conference.objects.filter(faculty=faculty)
+    info = iicInfo.objects.first()
+    
+    photo_url = None
+    if faculty.photo:
+        photo_url = req.build_absolute_uri(faculty.photo.url)
+
+    context = {
+        "faculty": faculty,
+        "patents": pat,
+        "books": books,
+        "journals": journals,
+        "bookchapters": bookchapters,
+        "copyrights": copyr,
+        "conferences": conferences,
+        "iic": info,
+        "basicDetail": basic,
+        "photo_url": photo_url,
+    }
+
+    html_string = render_to_string("faculty_pdf.html", context, request=req)
+
+    options = {
+        "enable-local-file-access": "",   
+        "page-size": "A4",
+        "encoding": "UTF-8",
+        # "margin-top": "10mm",
+        # "margin-right": "10mm",
+        # "margin-bottom": "10mm",
+        # "margin-left": "10mm",
+    }
+    
+    pdf_content = pdfkit.from_string(html_string, False, options=options, configuration=pdfkit_config)
+    
+    filename = f"{faculty.name}_details.pdf".replace(" ", "_")
+    response = HttpResponse(pdf_content, content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    
+    return response

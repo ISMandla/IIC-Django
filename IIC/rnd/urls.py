@@ -64,5 +64,8 @@ urlpatterns = [
     
     # ------------- search results ---------------
     path('search-results/', views.serchView, name='searchresults'),
+    
+    # ------------- PDF Generation ---------------
+    path('faculty-pdf/<int:pk>/', views.faculty_pdf, name='faculty_pdf'),
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

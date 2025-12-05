@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ faculty.name }} - Profile</title>
+  <style>
+    body {
+      font-family: "DejaVu Sans", sans-serif;
+      font-size: 12px;
+      margin: 30px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-right: 20px;
+      border: 1px solid #ccc;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .details h1 {
+      margin: 0 0 5px 0;
+      font-size: 20px;
+    }
+
+    .details p {
+      margin: 2px 0;
+    }
+
+    h2 {
+      margin-top: 25px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 3px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eee;
+      font-weight: bold;
+    }
+
+    .section {
+      margin-bottom: 15px;
+      page-break-inside: avoid;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 10px;
+      border-top: 1px solid #aaa;
+      padding-top: 5px;
+    }
+  </style>
+</head>
+<body>
+    <div class="header" style="display: flex; justify-content: space-between; width: 100%;">
+        <div class="left">
+            <div class="photo" style="margin-right: 15px;">
+            {% if faculty.photo %}
+                <img src="{{ photo_url }}" alt="{{ faculty.name }}" style="width:140px; height:auto; border-radius:8px;">
+            {% endif %}
+            </div>
+
+            <div class="details">
+            <h1 style="margin:0; padding:0;">{{ faculty.suf }} {{ faculty.name }}</h1>
+            <p><strong>Department:</strong> {{ faculty.dept }}</p>
+            <p><strong>Email:</strong> {{ faculty.email }}</p>
+            </div>
+
+        </div>
+
+        <div class="right" style="min-width: 220px;">
+            {% if basicDetail %}
+            {% if basicDetail.googleScholar %}
+                <p><strong>Google Scholar:</strong> {{ basicDetail.googleScholar }}</p>
+            {% endif %}
+            {% if basicDetail.orcid %}
+                <p><strong>Orcid:</strong> {{ basicDetail.orcid }}</p>
+            {% endif %}
+            {% if basicDetail.scopusid %}
+                <p><strong>Scopusid:</strong> {{ basicDetail.scopusid }}</p>
+            {% endif %}
+            {% if basicDetail.researchid %}
+                <p><strong>Researchid:</strong> {{ basicDetail.researchid }}</p>
+            {% endif %}
+            {% if basicDetail.vidwanPortal %}
+                <p><strong>VidwanPortal:</strong> {{ basicDetail.vidwanPortal }}</p>
+            {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+
+
+  <!-- Patents section -->
+  <div class="section">
+    <h2>Patents</h2>
+    {% if patents %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>Number</th>
+          <th>Domain</th>
+          <th>Year</th>
+          <th>Stat</th>
+        </tr>
+        {% for patent in patents %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ patent.title }}</td>
+            <td>{{ patent.patentNumber }}</td>
+            <td>{{ patent.domain }}</td>
+            <td>{{ patent.year }}</td>
+            <td>{{ patent.stat }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No patents available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Journals section -->
+  <div class="section">
+    <h2>Journal Publications</h2>
+    {% if journals %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>ISBN</th>
+          <th>JournalName</th>
+          <th>PublisherName</th>
+          <th>Volume/Pages</th>
+          <th>Issue</th>
+          <th>DoiLink</th>
+          <th>Year</th>
+        </tr>
+        {% for j in journals %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ j.title }}</td>
+            <td>{{ j.authors }}</td>
+            <td>{{ j.isbn }}</td>
+            <td>{{ j.journalName }}</td>
+            <td>{{ j.publisherName }}</td>
+            <td>{{ j.no }}/{{ j.pageNo }}</td>
+            <td>{{ j.issue }}</td>
+            <td>{{ j.doiLink }}</td>
+            <td>{{ j.year }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No journal publications available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Books section -->
+  <div class="section">
+    <h2>Books</h2>
+    {% if books %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>ISBN</th>
+          <th>PublisherName</th>
+          <th>Year</th>
+          
+        </tr>
+        {% for b in books %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ b.title }}</td>
+            <td>{{ b.authors }}</td>
+            <td>{{ b.isbn }}</td>
+            <td>{{ b.publisherName }}</td>
+            <td>{{ b.year }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No books available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Book Chapters section -->
+  <div class="section">
+    <h2>Book Chapters</h2>
+    {% if bookchapters %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>ISBN</th>
+          <th>PublisherName</th>
+          <th>chapterName</th>
+          <th>PageNo</th>
+          <th>DoiLink</th>
+          <th>Year</th>
+          
+        </tr>
+        {% for bc in bookchapters %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ bc.title }}</td>
+            <td>{{ bc.authors }}</td>
+            <td>{{ bc.isbn }}</td>
+            <td>{{ bc.publisherName }}</td>
+            <td>{{ bc.chapterName }}</td>
+            <td>{{ bc.pageNo }}</td>
+            <td>{{ bc.doiLink }}</td>
+            <td>{{ bc.year }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No book chapters available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Copyrights section -->
+  <div class="section">
+    <h2>Copyrights</h2>
+    {% if copyrights %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>CopyrightNumber</th>
+          <th>Area</th>
+          <th>Domain</th>
+          <th>stat</th>
+          <th>Year</th>
+        </tr>
+        {% for c in copyrights %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ c.copyrightNumber }}</td>
+            <td>{{ c.area }}</td>
+            <td>{{ c.domain }}</td>
+            <td>{{ c.stat }}</td>
+            <td>{{ c.year }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No copyrights available.</p>
+    {% endif %}
+  </div>
+
+  <!-- Conferences section -->
+  <div class="section">
+    <h2>Conference Publications</h2>
+    {% if conferences %}
+      <table>
+        <tr>
+          <th>S. No.</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>issn</th>
+          <th>journalName</th>
+          <th>publisherName</th>
+          <th>issue</th>
+          <th>pageNo/no.</th>
+          <th>DoiLink</th>
+          <th>Year</th>
+        </tr>
+        {% for conf in conferences %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ conf.title }}</td>
+            <td>{{ conf.authors }}</td>
+            <td>{{ conf.issn }}</td>
+            <td>{{ conf.journalName }}</td>
+            <td>{{ conf.publisherName }}</td>
+            <td>{{ conf.issue }}</td>
+            <td>{{ conf.pageNo }}/{{ conf.no }}</td>
+            <td>{{ conf.doiLink }}</td>
+            <td>{{ conf.year }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No conference publications available.</p>
+    {% endif %}
+  </div>
+
+  
+
+</body>
+</html>
