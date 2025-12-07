@@ -62,7 +62,7 @@ def basicEdit(req , pk):
         if basicf.is_valid():
             basicf.save()
             return redirect('admin-site')
-    context = {'basicf' : basicf}
+    context = {'form' : basicf}
     return render(req,"form.html",context)
 
 def basicDeletion(req , pk):
@@ -72,6 +72,7 @@ def basicDeletion(req , pk):
 
 #------------------- patent----------------------
 def add_form(req , pk):
+    page = "ADD Patent"
     form = patentForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -93,9 +94,10 @@ def add_form(req , pk):
     else:
         form = patentForm()
     
-    return render(req, 'form.html', {'form': form, 'iic' : info})
+    return render(req, 'form.html', {'form': form, 'iic' : info, 'page': page})
 
 def update_form(req, pk):
+    page = "Update Patent"
     form = patent.objects.get(id = pk)
     update_form = patentForm(instance=form)
     info = iicInfo.objects.first()
@@ -107,7 +109,7 @@ def update_form(req, pk):
         else:
             update_form = patentForm()
     
-    return render(req, 'form.html', {'form': update_form, 'iic' : info})
+    return render(req, 'form.html', {'form': update_form, 'iic' : info, 'page': page})
     
 def delete_form(req, pk):
     form = patent.objects.get(id = pk)
@@ -116,6 +118,7 @@ def delete_form(req, pk):
 
 # -----------------dept--------------------------
 def add_deptform(req):
+    page = "Add Department"
     deptform = deptForm()
     info = iicInfo.objects.first()
     if req.method == 'POST':
@@ -126,9 +129,10 @@ def add_deptform(req):
     else:
         deptform = deptForm()
     
-    return render(req, 'form.html', {'form': deptform, 'iic' : info})
+    return render(req, 'form.html', {'form': deptform, 'iic' : info, 'page': page})
 
 def update_deptform(req, pk):
+    page = "Update Department"
     deptform = dept.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_deptform = deptForm(instance=deptform)
@@ -140,7 +144,7 @@ def update_deptform(req, pk):
         else:
             update_deptform = deptForm()
     
-    return render(req, 'form.html', {'form': update_deptform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_deptform, 'iic' : info, 'page': page})
     
 def delete_deptform(req, pk):
     deptform = dept.objects.get(id = pk)
@@ -149,6 +153,7 @@ def delete_deptform(req, pk):
 
 # ----------------bookForm------------------------
 def add_bookform(req , pk):
+    page = "Add Book"
     bookform = bookForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -170,9 +175,10 @@ def add_bookform(req , pk):
     else:
         bookform = bookForm()
     
-    return render(req, 'form.html', {'form': bookform, 'iic' : info})
+    return render(req, 'form.html', {'form': bookform, 'iic' : info, 'page': page})
 
 def update_bookform(req, pk):
+    page = "Update Book"
     bookform = book.objects.get(id = pk)
     update_bookform = deptForm(instance=bookform)
     info = iicInfo.objects.first()
@@ -184,7 +190,7 @@ def update_bookform(req, pk):
         else:
             update_bookform = deptForm()
     
-    return render(req, 'form.html', {'form': update_bookform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_bookform, 'iic' : info, 'page': page})
     
 def delete_bookform(req, pk):
     bookform = book.objects.get(id = pk)
@@ -193,6 +199,7 @@ def delete_bookform(req, pk):
 
 # ---------------- Book Chapter ----------------
 def add_bookChapterform(req , pk):
+    page = "Add Book Chapter"
     bookchapterform = bookChapterForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -214,9 +221,10 @@ def add_bookChapterform(req , pk):
     else:
         bookchapterform = bookChapterForm()
     
-    return render(req, 'form.html', {'form': bookchapterform, 'iic' : info})
+    return render(req, 'form.html', {'form': bookchapterform, 'iic' : info, 'page': page})
 
 def update_bookChapterform(req, pk):
+    page = "Update Book Chapter"
     bookchapterform = bookChapter.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_bookchapterform = bookChapterForm(instance=bookchapterform)
@@ -228,7 +236,7 @@ def update_bookChapterform(req, pk):
         else:
             update_bookchapterform = bookChapterForm()
     
-    return render(req, 'form.html', {'form': update_bookchapterform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_bookchapterform, 'iic' : info, 'page': page})
     
 def delete_bookChapterform(req, pk):
     bookchapterform = bookChapter.objects.get(id = pk)
@@ -238,6 +246,7 @@ def delete_bookChapterform(req, pk):
 
 # ---------------- Faculty ----------------
 def add_facultform(req):
+    page = "Add Faculty"
     facultform = facultForm()
     info = iicInfo.objects.first()
     if req.method == 'POST':
@@ -248,9 +257,10 @@ def add_facultform(req):
     else:
         facultform = facultForm()
     
-    return render(req, 'form.html', {'form': facultform, 'iic' : info})
+    return render(req, 'form.html', {'form': facultform, 'iic' : info, 'page': page})
 
 def update_facultform(req, pk):
+    page = "Update Faculty"
     facultform = facult.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_facultform = facultForm(instance=facultform)
@@ -262,7 +272,7 @@ def update_facultform(req, pk):
         else:
             update_facultform = facultForm()
     
-    return render(req, 'form.html', {'form': update_facultform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_facultform, 'iic' : info, 'page': page})
     
 def delete_facultform(req, pk):
     facultform = facult.objects.get(id = pk)
@@ -272,6 +282,7 @@ def delete_facultform(req, pk):
 
 # ---------------- Suff ----------------
 def add_suffform(req):
+    page = "Add Suff"
     suffform = suffForm()
     info = iicInfo.objects.first()
     if req.method == 'POST':
@@ -282,9 +293,10 @@ def add_suffform(req):
     else:
         suffform = suffForm()
     
-    return render(req, 'form.html', {'form': suffform, 'iic' : info})
+    return render(req, 'form.html', {'form': suffform, 'iic' : info, 'page': page})
 
 def update_suffform(req, pk):
+    page = "Update Suff"
     suffform = suff.objects.get(id = pk)
     update_suffform = suffForm(instance=suffform)
     info = iicInfo.objects.first()
@@ -296,7 +308,7 @@ def update_suffform(req, pk):
         else:
             update_suffform = suffForm()
     
-    return render(req, 'form.html', {'form': update_suffform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_suffform, 'iic' : info, 'page': page})
     
 def delete_suffform(req, pk):
     suffform = suff.objects.get(id = pk)
@@ -306,6 +318,7 @@ def delete_suffform(req, pk):
 
 # ---------------- Copyright ----------------
 def add_copyrightform(req , pk):
+    page = "Add Copyright"
     copyrightform = copyrightForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -327,9 +340,10 @@ def add_copyrightform(req , pk):
     else:
         copyrightform = copyrightForm()
     
-    return render(req, 'form.html', {'form': copyrightform, 'iic' : info})
+    return render(req, 'form.html', {'form': copyrightform, 'iic' : info, 'page': page})
 
 def update_copyrightform(req, pk):
+    page = "Update Copyright"
     copyrightform = copyright.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_copyrightform = copyrightForm(instance=copyrightform)
@@ -341,7 +355,7 @@ def update_copyrightform(req, pk):
         else:
             update_copyrightform = copyrightForm()
     
-    return render(req, 'form.html', {'form': update_copyrightform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_copyrightform, 'iic' : info, 'page': page})
     
 def delete_copyrightform(req, pk):
     copyrightform = copyright.objects.get(id = pk)
@@ -351,6 +365,7 @@ def delete_copyrightform(req, pk):
 
 # ---------------- Conference ----------------
 def add_conferenceform(req , pk):
+    page = "Add Conference"
     conferenceform = conferenceForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -372,9 +387,10 @@ def add_conferenceform(req , pk):
     else:
         conferenceform = conferenceForm()
     
-    return render(req, 'form.html', {'form': conferenceform, 'iic' : info})
+    return render(req, 'form.html', {'form': conferenceform, 'iic' : info, 'page': page})
 
 def update_conferenceform(req, pk):
+    page = "Update Conference"
     conferenceform = conference.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_conferenceform = conferenceForm(instance=conferenceform)
@@ -386,7 +402,7 @@ def update_conferenceform(req, pk):
         else:
             update_conferenceform = conferenceForm()
     
-    return render(req, 'form.html', {'form': update_conferenceform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_conferenceform, 'iic' : info, 'page': page})
     
 def delete_conferenceform(req, pk):
     conferenceform = conference.objects.get(id = pk)
@@ -396,6 +412,7 @@ def delete_conferenceform(req, pk):
 
 # ---------------- Journal ----------------
 def add_journalform(req , pk):
+    page = "Add Journal"
     journalform = journalForm()
     if not req.user.is_superuser:
         fac = facult.objects.get(user = req.user)
@@ -417,9 +434,10 @@ def add_journalform(req , pk):
     else:
         journalform = journalForm()
     
-    return render(req, 'form.html', {'form': journalform, 'iic' : info})
+    return render(req, 'form.html', {'form': journalform, 'iic' : info, 'page': page})
 
 def update_journalform(req, pk):
+    page = "Update Journal"
     journalform = journal.objects.get(id = pk)
     info = iicInfo.objects.first()
     update_journalform = journalForm(instance=journalform)
@@ -431,7 +449,7 @@ def update_journalform(req, pk):
         else:
             update_journalform = journalForm()
     
-    return render(req, 'form.html', {'form': update_journalform, 'iic' : info})
+    return render(req, 'form.html', {'form': update_journalform, 'iic' : info, 'page': page})
     
 def delete_journalform(req, pk):
     journalform = journal.objects.get(id = pk)
