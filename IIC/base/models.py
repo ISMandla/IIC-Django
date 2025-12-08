@@ -159,6 +159,7 @@ class teamMember(models.Model):
         Head_content_Wing = "Head of Content Wing"
         Co_Head_content_Wing = "Co-Head of Content Wing"
         
+        
     name = models.CharField(max_length = 100 , blank = False , null = False)
     email = models.EmailField(blank = False , null = False)
     photo = models.ImageField(upload_to='member/images/',blank = True , null = True)
