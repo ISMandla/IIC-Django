@@ -3,9 +3,9 @@ from .models import posts
 
 from django.db.models import Q
 
-from .forms import queryForm 
+from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm
 from rnd.forms import facultForm
-from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity
+from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , certificate , ipr , incubation
 
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -141,3 +141,137 @@ def queryDeletion(req , pk):
     query.delete()
     return redirect('admin-site')
 
+#-------------------------- Team Members Page ----------------------- #
+def teamMenbersPage(req):
+    teammembers = teamMember.objects.all()
+    info = iicInfo.objects.first()
+    administrative = teammembers.objects.filter(Q(role="Convenor") | Q(role="Co-Convenor") | Q(role="Convenor_External") | Q(role="Faculty Advisor"))
+    
+    context = {'iic' : info , 'teammembers' : teammembers}
+    return render(req, "teamMembers.html" , context)
+
+
+
+def addteamMembers(req):
+    page = 'Add Team Members'
+    addteamMembersf = teamMembersForm()
+    info = iicInfo.objects.first()
+    if(req.method == "POST"):
+        addteamMembersf = teamMembersForm(req.POST)
+        if(addteamMembersf.is_valid()):
+            addteamMembersf.save()
+        return redirect("admin-site")
+    
+    return render(req , "form2.html" , {'form' : addteamMembersf, 'page' : page, 'iic' : info})
+
+def updateteamMembers(req , pk):
+    page = 'Update Team Members'
+    teammember = teamMember.objects.get(id = pk)
+    updateteamMembersf = teamMembersForm(instance = teammember)
+    if(req.method == "POST"):
+        updateteamMembersf = teamMembersForm(req.POST , instance = teammember)
+        if(updateteamMembersf.is_valid()):
+            updateteamMembersf.save()
+            return redirect("admin-site")
+        else:
+            updateteamMembersf = teamMembersForm()
+    
+    return render(req , "form2.html" , {'form' : updateteamMembersf, 'page' : page})
+
+def deleteteamMembers(pk):
+    teammember = User.objects.get(id = pk)
+    teammember.delete()
+    return redirect('admin-site')
+
+# --------------------------Certificate------------------------------ #
+def addcertificate(req):
+    page = 'Add Certificate'
+    certificatef = certificateForm()
+    if(req.method == "POST"):
+        certificatef = certificateForm(req.POST , req.FILES)
+        if(certificatef.is_valid()):
+            certificatef.save()
+        return redirect("admin-site")
+    
+    return render(req , "form2.html" , {'form' : certificatef, 'page' : page})
+
+def updatecertificate(req , pk):
+    page = 'Update Certificate'
+    certificatee = certificate.objects.get(id = pk)
+    updatecertificatef = certificateForm(instance = certificatee)
+    if(req.method == "POST"):
+        updatecertificatef = certificateForm(req.POST , req.FILES , instance = certificatee)
+        if(updatecertificatef.is_valid()):
+            updatecertificatef.save()
+            return redirect("admin-site")
+        else:
+            updatecertificatef = certificateForm()
+    
+    return render(req , "form2.html" , {'form' : updatecertificatef, 'page' : page})
+
+def deletecertificate(pk):
+    certificatee = gallery.objects.get(id = pk)
+    certificatee.delete()
+    return redirect('admin-site')
+
+# -------------------------- IPR ------------------------------ #
+def addipr(req):
+    page = 'Add IPR'
+    iprf = iprForm()
+    if(req.method == "POST"):
+        iprf = iprForm(req.POST , req.FILES)
+        if(iprf.is_valid()):
+            iprf.save()
+        return redirect("admin-site")
+    
+    return render(req , "form2.html" , {'form' : iprf, 'page' : page})
+
+def updateipr(req , pk):
+    page = 'Update IPR'
+    ipre = ipr.objects.get(id = pk)
+    updateiprf = iprForm(instance = ipre)
+    if(req.method == "POST"):
+        updateiprf = iprForm(req.POST , req.FILES , instance = ipre)
+        if(updateiprf.is_valid()):
+            updateiprf.save()
+            return redirect("admin-site")
+        else:
+            updateiprf = iprForm()
+    
+    return render(req , "form2.html" , {'form' : updateiprf, 'page' : page})
+
+def deleteipr(pk):
+    ipre = ipr.objects.get(id = pk)
+    ipre.delete()
+    return redirect('admin-site')
+
+# -------------------------- Incubation ------------------------------ #
+def addincubation(req):
+    page = 'Add Incubation'
+    incubationf = incubationForm()
+    if(req.method == "POST"):
+        incubationf = incubationForm(req.POST , req.FILES)
+        if(incubationf.is_valid()):
+            incubationf.save()
+        return redirect("admin-site")
+    
+    return render(req , "form2.html" , {'form' : incubationf, 'page' : page})
+
+def updateincubation(req , pk):
+    page = 'Update Incubation'
+    incubatione = incubation.objects.get(id = pk)
+    updateincubationf = incubationForm(instance = incubatione)
+    if(req.method == "POST"):
+        updateincubationf = incubationForm(req.POST , req.FILES , instance = incubatione)
+        if(updateincubationf.is_valid()):
+            updateincubationf.save()
+            return redirect("admin-site")
+        else:
+            updateincubationf = incubationForm()
+    
+    return render(req , "form2.html" , {'form' : updateincubationf, 'page' : page})
+
+def deleteincubation(pk):
+    incubatione = incubation.objects.get(id = pk)
+    incubatione.delete()
+    return redirect('admin-site')

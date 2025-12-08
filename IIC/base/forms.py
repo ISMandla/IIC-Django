@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo
+from .models import posts ,achievement , contactOrg , organisation, querys , meeting , gallery , activity , notice ,iicInfo, teamMember, certificate, ipr, incubation
 from django.contrib.auth.models import User
 
 
@@ -144,4 +144,22 @@ class queryForm(ModelForm):
         model = querys
         fields = "__all__"
 
+class teamMembersForm(ModelForm):
+    class Meta:
+        model = teamMember
+        fields = "__all__"
     
+class certificateForm(ModelForm):
+    class Meta:
+        model = certificate
+        fields = "__all__"
+        
+class iprForm(ModelForm):
+    class Meta:
+        model = ipr
+        fields = "__all__"
+        
+class incubationForm(ModelForm):
+    class Meta:
+        model = incubation
+        fields = "__all__"
