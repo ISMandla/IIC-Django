@@ -276,7 +276,9 @@ def update_facultform(req, pk):
     
 def delete_facultform(req, pk):
     facultform = facult.objects.get(id = pk)
+    user1 = User.objects.get(id = facultform.user.id)
     facultform.delete()
+    user1.delete()
     return redirect('research')
 
 

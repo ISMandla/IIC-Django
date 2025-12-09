@@ -154,6 +154,7 @@ class teamMembersForm(ModelForm):
     class Meta:
         model = teamMember
         fields = "__all__"
+        exclude = ["support"]
     
 class certificateForm(ModelForm):
     class Meta:

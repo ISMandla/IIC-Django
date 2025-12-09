@@ -180,6 +180,7 @@
     <div class="about-content">
       <div class="about-text">
         {% for i in faculty %}
+       
         <a href="{% url 'facul' i.id %}" aria-label="Open faculty profile {{ i.name }}">
           <div class="about-card" tabindex="0" role="group" aria-labelledby="fac-name-{{ i.id }}">
             <div class="card-icon" aria-hidden="true">
@@ -197,6 +198,10 @@
             {% endif %}
           </div>
         </a>
+        <a href="{% url 'deletefacultform' i.id %}">
+
+            <span class="material-symbols-outlined">delete_forever</span>
+    </a>
         {% endfor %}
       </div>
     </div>

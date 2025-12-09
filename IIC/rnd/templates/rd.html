@@ -212,12 +212,16 @@
 
               <div id="departmentsGrid" class="grid" role="list">
                 {% for i in dept %}
+                 
                 <a href="{% url 'depart' i.id %}" role="listitem" aria-label="Open department {{ i.name }}">
                   <div class="card" tabindex="0">
                     <div class="card-icon" aria-hidden="true">
                       <i class="fas fa-university"></i>
                     </div>
+                    <a href="{% url 'dept-delete' i.id %}">
 
+            <span class="material-symbols-outlined">delete_forever</span>
+    </a>
                     <h3 class="name">{{ i.name }}</h3>
                     <div class="dept-title">{{ i.short_description|default:'' }}</div>
                   </div>
