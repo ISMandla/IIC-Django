@@ -3,7 +3,7 @@ from .models import posts
 
 from django.db.models import Q
 
-from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm
+from .forms import queryForm , teamMembersForm, certificateForm, iprForm , incubationForm , activityFrom
 from rnd.forms import facultForm
 from .models import querys, iicInfo , notice , meeting , achievement , gallery , activity, teamMember , ipr , incubation, certificate
 
@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-
+from django.utils import timezone
 
 
 # Create your views here.
@@ -34,8 +34,17 @@ def home(req):
     return render(req,"a1home.html" , context)
 
 def activities(req):
+    current_year = timezone.now().year
+    previous_year = timezone.now().year - 1
     info = iicInfo.objects.first()
-    context = {'iic' : info}
+    calact = activity.objects.filter(category = "IIC Calender Activity")
+    micact = activity.objects.filter(category = "MIC_Driven Activity")
+    celebact = activity.objects.filter(category = "Celebration Activity")
+    selfact = activity.objects.filter(category = "Self_Driven Activity")
+    previous = activity.objects.filter(created__year = previous_year)
+    current = activity.objects.filter(created__year = current_year)
+
+    context = {'iic' : info , 'calact' : calact , 'micact' : micact , 'celebact' : celebact , 'selfact' : selfact  , 'previous' : previous , 'current' : current}
     return render(req, "acti.html" , context)
 
 def meet(req):
@@ -299,3 +308,37 @@ def deleteincubation(req, pk):
     incubatione = incubation.objects.get(id = pk)
     incubatione.delete()
     return redirect('admin-site')
+
+
+# ------------------------------ Activity -----------------------------
+
+def addactivity(req):
+    page = 'Add Activity'
+    actf = activityFrom()
+    if(req.method == "POST"):
+        actf = activityFrom(req.POST , req.FILES)
+        if(actf.is_valid()):
+            actf.save()
+        return redirect("activities")
+    
+    return render(req , "actform.html" , {'form' : actf, 'page' : page})
+
+def updateactivity(req , pk):
+    page = 'Update Activity'
+    act = activity.objects.get(id = pk)
+    actf = activityFrom(instance = act)
+    if(req.method == "POST"):
+        actf = activityFrom(req.POST , req.FILES , instance = act)
+        if(actf.is_valid()):
+            actf.save()
+            return redirect("activities")
+        else:
+            actf = activityFrom()
+    
+    return render(req , "actform.html" , {'form' : actf, 'page' : page})
+
+def deleteactivity(req , pk):
+    print(pk)
+    act = activity.objects.get(id = pk)
+    act.delete()
+    return redirect('activities')

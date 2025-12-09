@@ -22,6 +22,11 @@ class postForm(ModelForm):
             }),
         }
 
+class activityFrom(ModelForm):
+    class Meta:
+        model = activity
+        fields = "__all__"
+
 class achievForm(ModelForm):
     class Meta:
         model = achievement
@@ -39,6 +44,7 @@ class achievForm(ModelForm):
                 'style': 'resize: none; border-radius: 10px;'
             }),            
         }
+        exclude = ["stat"]
 
 class iicInfoForm(ModelForm):
     class Meta:

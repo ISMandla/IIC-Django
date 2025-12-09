@@ -1,6 +1,11 @@
 from django.contrib import admin
+<<<<<<< Updated upstream
 from .models import posts , organisation , contactOrg , achievement ,querys, iicInfo , meeting , notice , gallery , activity, teamMember, certificate, ipr, incubation
 
+=======
+from .models import posts , organisation , contactOrg , achievement ,querys, iicInfo , meeting , notice , gallery , activity
+from .models import teamMember , incubation , ipr , certificate
+>>>>>>> Stashed changes
 # Register your models here.
 
 admin.site.register(posts)
@@ -14,6 +19,12 @@ admin.site.register(notice)
 admin.site.register(gallery)
 admin.site.register(activity)
 admin.site.register(teamMember)
+<<<<<<< Updated upstream
 admin.site.register(certificate) 
 admin.site.register(ipr)
 admin.site.register(incubation)
+=======
+admin.site.register(incubation)
+admin.site.register(ipr)
+admin.site.register(certificate)
+>>>>>>> Stashed changes

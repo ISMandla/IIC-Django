@@ -11,10 +11,14 @@ class posts(models.Model):
         return self.title
     
 class achievement(models.Model):
+    class status(models.TextChoices):
+        Approved = "Approved"
+        Pending = "Pending"
     title = models.CharField(max_length = 100 , blank = True)
     description = models.TextField(max_length = 1000 , blank = False)
     date = models.DateField(null=True , blank = True)
     time = models.TimeField(null=True , blank = True)
+    stat = models.CharField(choices = status , default = status.Pending , null = True , blank = True)
     photo = models.ImageField(upload_to='image/achievements/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
 
@@ -58,6 +62,7 @@ class activity(models.Model):
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.headline
