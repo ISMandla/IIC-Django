@@ -523,6 +523,7 @@
       border:1px solid var(--card-border);
       box-shadow: var(--card-shadow);
       padding: 20px 22px;
+      margin-bottom: 14px;
     }
 
     .meeting-header {
@@ -704,7 +705,7 @@
 </head>
 
 <body>
-    {% include 'nav.html' %}
+  {% include 'nav.html' %}
   <main class="page">
     <h1 class="page-title">Teacher Dashboard</h1>
 
@@ -748,7 +749,9 @@
               </div>
             </div>
 
-            <a href="{% url 'updatefacultform' fac.id %}"><button class="profile-update-btn">Update</button></a>
+            <a href="{% url 'updatefacultform' fac.id %}">
+              <button class="profile-update-btn">Update</button>
+            </a>
           </div>
 
           <div class="profile-row">
@@ -792,70 +795,76 @@
           </div>
         </section>
 
-        <!-- MEETING CARD (BOTTOM) -->
-        <section class="meeting-card" id="meeting-section">
+        <!-- MEETING CARDS (BOTTOM, ONE CARD PER MEETING) -->
+        <section id="meeting-section">
           {% if meet %}
-          {% for i in meet %}
-          <div class="meeting-header">
-            <div class="meeting-header-left">
-              <div class="meeting-icon">📅</div>
-              <div>
-                <h2 class="meeting-name">{{i.headline}}</h2>
-              </div>
-            </div>
+            {% for i in meet %}
+            <article class="meeting-card">
+              <div class="meeting-header">
+                <div class="meeting-header-left">
+                  <div class="meeting-icon">📅</div>
+                  <div>
+                    <h2 class="meeting-name">{{i.headline}}</h2>
+                  </div>
+                </div>
 
-            <div style="text-align:right;">
-              <div class="published">Published on: <span>{{i.created.date}}</span></div>
-              <button class="toggle-btn">⌄</button>
-            </div>
-          </div>
-
-          <div class="meeting-meta-row">
-            <div class="meta-item">
-              <div class="meta-icon">📆</div>
-              <div>
-                <div class="meta-label">Date</div>
-                <div class="meta-value">{{i.date.date}}</div>
-              </div>
-            </div>
-
-            <div class="meta-item">
-              <div class="meta-icon">⏰</div>
-              <div>
-                <div class="meta-label">Time</div>
-                <div class="meta-value">{{i.date.time}}</div>
-              </div>
-            </div>
-
-            
-          </div>
-
-          <div class="meeting-extra">
-            <h3 class="section-title">Meeting Overview</h3>
-            <p class="section-body">
-              {{i.description}}
-            </p>
-
-            <h3 class="section-title">Faculty</h3>
-            <ul class="points-list">
-              {% for j in i.faculty.all %}
-              <li>{{j.suf}} {{j.name}}</li>
-              {% endfor %}
-            </ul>
-
-            <h3 class="section-title">Meeting Documents</h3>
-            <div class="doc-card">
-              <div class="doc-left">
-                <div class="doc-icon">📄</div>
-                <div>
-                  <div class="doc-title">Agenda</div>
-                  <div class="doc-subtitle">Industry Partnership Summit Agenda</div>
+                <div style="text-align:right;">
+                  <div class="published">
+                    Published on: <span>{{i.created.date}}</span>
+                  </div>
+                  <button class="toggle-btn">⌄</button>
                 </div>
               </div>
-              <button class="doc-download-btn">⬇</button>
-            </div>
-          </div>
-          {% endfor %}
+
+              <div class="meeting-meta-row">
+                <div class="meta-item">
+                  <div class="meta-icon">📆</div>
+                  <div>
+                    <div class="meta-label">Date</div>
+                    <div class="meta-value">{{i.date.date}}</div>
+                  </div>
+                </div>
+
+                <div class="meta-item">
+                  <div class="meta-icon">⏰</div>
+                  <div>
+                    <div class="meta-label">Time</div>
+                    <div class="meta-value">{{i.date.time}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="meeting-extra">
+                <h3 class="section-title">Meeting Overview</h3>
+                <p class="section-body">
+                  {{i.description}}
+                </p>
+
+                <h3 class="section-title">Faculty</h3>
+                <ul class="points-list">
+                  {% for j in i.faculty.all %}
+                  <li>{{j.suf}} {{j.name}}</li>
+                  {% endfor %}
+                </ul>
+
+                <h3 class="section-title">Meeting Documents</h3>
+                <div class="doc-card">
+                  <div class="doc-left">
+                    <div class="doc-icon">📄</div>
+                    <div>
+                      <div class="doc-title">Agenda</div>
+                      <div class="doc-subtitle">Industry Partnership Summit Agenda</div>
+                    </div>
+                  </div>
+                  <button class="doc-download-btn">⬇</button>
+                </div>
+              </div>
+            </article>
+            {% endfor %}
+          {% else %}
+            <p style="font-size:0.95rem;color:#6b7280;">
+              No meetings scheduled.
+            </p>
           {% endif %}
         </section>
       </div>
@@ -863,6 +872,7 @@
   </main>
 
   <script>
+    // Attach independent toggle behavior to each meeting card
     document.querySelectorAll('.meeting-card').forEach(card => {
       const btn = card.querySelector('.toggle-btn');
       const extra = card.querySelector('.meeting-extra');
@@ -875,7 +885,7 @@
       });
     });
   </script>
-    {% include 'foot.html' %}
+  {% include 'foot.html' %}
 </body>
 </html>
 

@@ -11,10 +11,14 @@ class posts(models.Model):
         return self.title
     
 class achievement(models.Model):
+    class status(models.TextChoices):
+        Approved = "Approved"
+        Pending = "Pending"
     title = models.CharField(max_length = 100 , blank = True)
     description = models.TextField(max_length = 1000 , blank = False)
     date = models.DateField(null=True , blank = True)
     time = models.TimeField(null=True , blank = True)
+    stat = models.CharField(choices = status , default = status.Pending , null = True , blank = True)
     photo = models.ImageField(upload_to='image/achievements/', null=True , blank = True)
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
 
@@ -47,7 +51,7 @@ class notice(models.Model):
 class activity(models.Model):
     class cat(models.TextChoices):
         IIC_Calender = "IIC Calender Activity"
-        MIC_Driven = "MIC_Driven Activity"
+        MIC_Driven = "MIC Driven Activity"
         Celebration = "Celebration Activity"
         Self_Driven = "Self Driven Activity"
     date = models.DateField(null=True , blank = True)
@@ -58,6 +62,7 @@ class activity(models.Model):
     pdf_file = models.FileField(upload_to='pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.headline
@@ -153,10 +158,11 @@ class teamMember(models.Model):
         Head_content_Wing = "Head of Content Wing"
         Co_Head_content_Wing = "Co-Head of Content Wing"
         
-    role = models.CharField(max_length=100, choices=role.choices, blank=True, null=True,)
+        
     name = models.CharField(max_length = 100 , blank = False , null = False)
     email = models.EmailField(blank = False , null = False)
     photo = models.ImageField(upload_to='member/images/',blank = True , null = True)
+    support = models.FileField(upload_to='member/pdfs/', null = True , blank = True)
 
     def __str__(self):
         return self.name
