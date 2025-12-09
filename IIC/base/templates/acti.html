@@ -156,6 +156,13 @@
     {% include 'nav.html' %}
     <main class="page">
       <!-- ---------- TABS ---------- -->
+      <div class="add-wrap">
+        {% if request.user.is_superuser %}
+        <a href="{% url 'activity-create' %}"
+          ><button class="btn-add">+ Add Activity</button></a
+        >
+        {% endif %}
+      </div>
       <nav class="activity-tabs">
         <div class="activity-tab active" data-target="sec1">
           IIC Calendar Activity
@@ -164,10 +171,10 @@
         <div class="activity-tab" data-target="sec3">Celebration Activity</div>
         <div class="activity-tab" data-target="sec4">Self-Driven Activity</div>
         <div class="activity-tab" data-target="sec5">
-          My Activity Calendar - 2024-25
+          Activity Calendar - Previous Year
         </div>
         <div class="activity-tab" data-target="sec6">
-          My Activity Calendar - 2025-26
+          Activity Calendar - Current Year
         </div>
       </nav>
 
@@ -176,145 +183,147 @@
       <!-- ------------------------------------------------------------------ -->
 
       <!-- SECTION 1 -->
+      {% if calact %} {% for i in calact %}
       <section id="sec1" class="activity-section active">
-        <div class="add-wrap">
-          {% if request.user.is_superuser %}
-          <a href="{% url 'home' %}"
-            ><button class="btn-add">+ Add Activity</button></a
-          >
-          {% endif %}
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">IIC Calendar Activity</h2>
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <!-- FILE INPUT -->
-            <input type="file" class="file-input" id="upload1" />
 
             <div class="activity-actions">
-              <label for="upload1" class="btn btn-upload">📤 Upload PDF</label>
-              <button class="btn">View All</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">Download Template</button>
             </div>
           </div>
-          <span class="tag">Academic Year 2024–25</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
+      {% endfor %} {% endif %}
 
       <!-- SECTION 2 -->
+      {% if micact %} {% for i in micact %}
       <section id="sec2" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">MIC Driven Activity</h2>
-
-            <input type="file" class="file-input" id="upload2" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload2" class="btn btn-upload">📤 Upload PDF</label>
-              <button class="btn">Previous Reports</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">Download Format</button>
             </div>
           </div>
-          <span class="tag">All MIC Events Included</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
-
+      {% endfor %} {% endif %}
       <!-- SECTION 3 -->
+      {% if celebact %} {% for i in celebact %}
       <section id="sec3" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">Celebration Activity</h2>
-
-            <input type="file" class="file-input" id="upload3" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload3" class="btn btn-upload"
-                >📤 Upload Poster</label
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
               >
-              <button class="btn">View Schedule</button>
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">Rules PDF</button>
             </div>
           </div>
-          <span class="tag">Celebration Events</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
-
+      {% endfor %} {% endif %}
       <!-- SECTION 4 -->
+      {% if selfact %} {% for i in selfact %}
       <section id="sec4" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">Self-Driven Activity</h2>
-
-            <input type="file" class="file-input" id="upload4" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload4" class="btn btn-upload"
-                >📤 Upload Proof</label
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
               >
-              <button class="btn">Pending Approvals</button>
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">Activity Guide</button>
             </div>
           </div>
-          <span class="tag">Self Initiated</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
+      {% endfor %} {% endif %}
 
       <!-- SECTION 5 -->
+      {% if previous %} {% for i in previous %}
       <section id="sec5" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">My Activity Calendar - 2024–25</h2>
-
-            <input type="file" class="file-input" id="upload5" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload5" class="btn btn-upload">📤 Upload Plan</label>
-              <button class="btn">Generate PDF</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">View Calendar</button>
             </div>
           </div>
-          <span class="tag">Year 2024–25</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
-
+      {% endfor %} {% endif %}
       <!-- SECTION 6 -->
+      {% if current %} {% for i in current %}
       <section id="sec6" class="activity-section">
-        <div class="add-wrap">
-          <button class="btn-add">+ Add Activity</button>
-        </div>
-
         <div class="activity-box">
           <div class="activity-box-header">
-            <h2 class="activity-title">My Activity Calendar - 2025–26</h2>
-
-            <input type="file" class="file-input" id="upload6" />
+            <h2 class="activity-title">{{i.headline}}</h2>
 
             <div class="activity-actions">
-              <label for="upload6" class="btn btn-upload">📤 Upload Plan</label>
-              <button class="btn">View Timeline</button>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'activity-update' i.id %}"
+                ><label for="upload1" class="btn btn-upload">Edit</label></a
+              >
+              <a href="{% url 'activity-delete' i.id %}"
+                ><button class="btn">Delete</button></a
+              >
+              {% endif %}
               <button class="btn">Download Format</button>
             </div>
           </div>
-          <span class="tag">Year 2025–26</span>
+          <span class="tag">{{i.created.date}}</span>
         </div>
       </section>
+      {% endfor %} {% endif %}
     </main>
 
     <script>

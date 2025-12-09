@@ -42,7 +42,10 @@ urlpatterns = [
     path('update_incubation/<int:pk>/', views.updateincubation , name = "update_incubation"),
     path('delete_incubation/<int:pk>/', views.deleteincubation , name = "delete_incubation"),
     
-    
+
+    path('activity-create/' , views.addactivity , name = "activity-create"),
+    path('activity-update/<int:pk>' , views.updateactivity , name = "activity-update"),
+    path('activity-delete/<int:pk>' , views.deleteactivity , name = "activity-delete"),
 
 
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)
