@@ -34,6 +34,9 @@ class meeting(models.Model):
     support = models.FileField(upload_to='meeting/pdfs/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.headline
@@ -45,6 +48,9 @@ class notice(models.Model):
     photo = models.ImageField(upload_to='image/notices/', null=True , blank = True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created']
     
     def __str__(self):
         return self.headline
