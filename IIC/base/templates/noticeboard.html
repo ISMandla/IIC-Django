@@ -179,6 +179,14 @@
         transform: translateY(1px);
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
       }
+      .doc-download-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
     </style>
   </head>
   <body>
@@ -199,6 +207,13 @@
           <article class="card" aria-labelledby="notice-1-title">
             <div class="head">
               <h3 id="notice-1-title">{{i.headline}}</h3>
+              <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
               <div class="meta">
                 <!-- calendar icon -->
                 <svg
