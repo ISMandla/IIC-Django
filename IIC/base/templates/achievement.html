@@ -349,6 +349,15 @@
           transform: translateY(0);
         }
       }
+
+      .doc-download-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
     </style>
   </head>
   <body>
@@ -404,8 +413,15 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         ">
             <span class="material-symbols-outlined">delete_forever</span>
-          {% endif %}
+          {% endif  %}
           </button>
+          <button class="doc-download-btn">
+                {% if i.pdf_file %}
+                <a href="{{ i.pdf_file.url }}" target="_blank" rel="noopener noreferrer"  style="text-decoration:none; color:var(--accent-blue); font-weight:600;"> View Certificate</a>
+                {% else %}
+                  <p>No support file</p>
+                {% endif %}
+              </button>
     </a></span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 6px">
