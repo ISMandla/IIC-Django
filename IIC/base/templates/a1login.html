@@ -299,6 +299,17 @@
         <h1 id="loginTitle">Welcome Back</h1>
         <p class="lead">Login to your IIC account</p>
 
+        {% if messages %}
+          <div style="margin-top: 12px;">
+            {% for message in messages %}
+              <div class="error">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+
         <form action="" method="POST">
           {% csrf_token %}
           <!-- Email (now text input) -->
@@ -317,8 +328,10 @@
               <input
                 id="email"
                 name="username"
+                value="{{ request.POST.username }}"
                 type="text"
                 placeholder="User name"
+                required
               />
             </div>
           </div>

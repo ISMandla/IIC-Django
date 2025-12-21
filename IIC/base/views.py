@@ -89,22 +89,24 @@ def registerFac(req):
     form = UserCreationForm()
     form1 = facultForm()
     if(req.method == "POST"):
-        count = 0
         form = UserCreationForm(req.POST)
         form1 = facultForm(req.POST , req.FILES)
-        if(form.is_valid):
-            user = form.save(commit = False)
+        if form.is_valid() and form1.is_valid():
+            user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            login(req , user)
-            count += 1
-        if(form1.is_valid):
-            fac = form1.save(commit = False)
-            fac.user = req.user
+
+            fac = form1.save(commit=False)
+            fac.user = user
             fac.save()
-            count +=1
-        if(count == 2):
+
+            login(req, user)
             return redirect('rndinfo')
+        else:
+            if form.errors:
+                messages.error(req, 'User details are invalid.')
+            if form1.errors:
+                messages.error(req, 'Password is not correct or not entered properly.')
     context = {'iic' : info , 'page' : page , 'form' : form , 'form1' : form1}
     return render(req , 'signup1.html' , context)
 
@@ -115,14 +117,13 @@ def loginFac(req):
         if(req.user.is_superuser):
             return redirect('admin-site')
         return redirect('home')
+    
     if(req.method == "POST"):
         username = req.POST.get('username')
         password = req.POST.get('password')
-        try:
-            user = User.objects.get(username = username)
-        except:
-            messages.error(req , 'User does not exist!')
+        
         user1 = authenticate(req , username = username , password = password)
+        
         if user1 is not None:
             login(req , user1)
             if user1.is_superuser:
